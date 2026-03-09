@@ -1185,6 +1185,7 @@ function Login({ onLogin, lang, setLang }) {
       if (res.ok) { onLogin(data.role, data.user); }
       else { setErr(data.error || t.err); setLoading(false); }
     } catch(e) {
+      if(email==="universalmiusic@gmail.com"&&pass==="Sympra2026!"){onLogin("admin",null);return;}
       if(email===DB.freelancer.email&&pass===DB.freelancer.password){onLogin("freelancer",null);return;}
       const cl=DB.clients.find(c=>c.email===email.toLowerCase()&&c.password===pass);
       if(cl){onLogin("client",cl);return;}
@@ -1345,6 +1346,88 @@ function FreelancerShell({ db, dispatch, onLogout }) {
           </div>
         ))}
       </nav>
+    </div>
+  );
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  ADMIN PANEL
+// ════════════════════════════════════════════════════════════
+function AdminPanel({ onLogout }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const fmt = v => "$" + Number(v||0).toLocaleString();
+
+  useEffect(() => {
+    fetch("/api/admin", { headers: { "x-admin-token": "sympra-admin-2026" } })
+      .then(r => r.json())
+      .then(d => { setData(d); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100vh",background:"#080810",color:"#fff",fontFamily:"sans-serif"}}>Cargando panel...</div>;
+
+  return (
+    <div style={{minHeight:"100vh",background:"#080810",color:"#f0f0fa",fontFamily:"'DM Sans',sans-serif",padding:0}}>
+      <div style={{background:"#0e0e1a",borderBottom:"1px solid #1e1e30",padding:"16px 32px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:22,fontWeight:800}}>Sym<em style={{color:"#a855f7",fontStyle:"normal"}}>pra</em> <span style={{fontSize:13,color:"#60607a",fontWeight:400}}>Admin</span></div>
+        <button onClick={onLogout} style={{background:"rgba(255,255,255,.08)",border:"1px solid #1e1e30",color:"#a0a0c0",padding:"8px 16px",borderRadius:100,cursor:"pointer",fontSize:13}}>Cerrar sesión</button>
+      </div>
+      <div style={{padding:"32px"}}>
+        <h1 style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:28,fontWeight:800,marginBottom:8}}>Panel de Control</h1>
+        <p style={{color:"#60607a",fontSize:14,marginBottom:32}}>Visión general de Sympra</p>
+
+        {/* Stats */}
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16,marginBottom:32}}>
+          {[
+            {label:"Freelancers",value:data?.stats?.total_freelancers||0,icon:"👥",color:"#7c3aed"},
+            {label:"Clientes",value:data?.stats?.total_clients||0,icon:"🤝",color:"#06b6d4"},
+            {label:"Proyectos",value:data?.stats?.total_projects||0,icon:"🚀",color:"#f59e0b"},
+            {label:"Total Facturado",value:fmt(data?.stats?.total_invoiced),icon:"💰",color:"#10b981"},
+          ].map((s,i)=>(
+            <div key={i} style={{background:"#0e0e1a",border:"1px solid #1e1e30",borderRadius:16,padding:24}}>
+              <div style={{fontSize:28,marginBottom:8}}>{s.icon}</div>
+              <div style={{fontSize:28,fontWeight:800,fontFamily:"'Bricolage Grotesque',sans-serif",color:s.color}}>{s.value}</div>
+              <div style={{fontSize:12,color:"#60607a",marginTop:4}}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Freelancers table */}
+        <div style={{background:"#0e0e1a",border:"1px solid #1e1e30",borderRadius:16,overflow:"hidden"}}>
+          <div style={{padding:"20px 24px",borderBottom:"1px solid #1e1e30",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <div style={{fontWeight:700,fontSize:16}}>Freelancers registrados</div>
+            <div style={{fontSize:13,color:"#60607a"}}>{data?.freelancers?.length||0} usuarios</div>
+          </div>
+          <div style={{overflowX:"auto"}}>
+            <table style={{width:"100%",borderCollapse:"collapse"}}>
+              <thead>
+                <tr style={{borderBottom:"1px solid #1e1e30"}}>
+                  {["Nombre","Email","Plan","Clientes","Proyectos","Facturado","Registrado"].map(h=>(
+                    <th key={h} style={{padding:"12px 24px",textAlign:"left",fontSize:11,color:"#60607a",fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {(data?.freelancers||[]).map((f,i)=>(
+                  <tr key={f.id} style={{borderBottom:"1px solid rgba(255,255,255,.03)",background:i%2===0?"transparent":"rgba(255,255,255,.01)"}}>
+                    <td style={{padding:"14px 24px",fontWeight:600,fontSize:14}}>{f.name}</td>
+                    <td style={{padding:"14px 24px",color:"#a0a0c0",fontSize:13}}>{f.email}</td>
+                    <td style={{padding:"14px 24px"}}>
+                      <span style={{background:f.plan==="pro"?"rgba(124,58,237,.2)":f.plan==="agency"?"rgba(6,182,212,.2)":"rgba(255,255,255,.08)",color:f.plan==="pro"?"#a855f7":f.plan==="agency"?"#06b6d4":"#60607a",padding:"3px 10px",borderRadius:100,fontSize:11,fontWeight:700,textTransform:"uppercase"}}>{f.plan||"starter"}</span>
+                    </td>
+                    <td style={{padding:"14px 24px",color:"#f0f0fa",fontWeight:600}}>{f.client_count||0}</td>
+                    <td style={{padding:"14px 24px",color:"#f0f0fa",fontWeight:600}}>{f.project_count||0}</td>
+                    <td style={{padding:"14px 24px",color:"#10b981",fontWeight:700}}>{fmt(f.total_invoiced)}</td>
+                    <td style={{padding:"14px 24px",color:"#60607a",fontSize:12}}>{new Date(f.created_at).toLocaleDateString("es-ES")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1551,6 +1634,7 @@ export default function SympraApp() {
       {!session && <Login lang={lang} setLang={setLang} onLogin={(role,user)=>setSession({role,user,client:user})}/>}
       {session?.role==="freelancer" && <FreelancerShell db={db} dispatch={dispatch} onLogout={()=>setSession(null)}/>}
       {session?.role==="client"     && <ClientPortal client={session.client} db={db} dispatch={dispatch} onLogout={()=>setSession(null)} lang={lang} setLang={setLang}/>}
+      {session?.role==="admin"      && <AdminPanel onLogout={()=>setSession(null)}/>}
       {modalType && MODAL_CFGS[modalType] && <FormModal cfg={MODAL_CFGS[modalType]} data={db} onClose={()=>setModalType(null)} onSave={form=>dispatch({type:"saveNew",form})}/>}
       <ToastStack toasts={toasts} onDismiss={dismissToast}/>
     </>
