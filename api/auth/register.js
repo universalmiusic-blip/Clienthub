@@ -26,7 +26,16 @@ export default async function handler(req, res) {
       [name, email.toLowerCase(), password, 'Freelancer', 5000, 'starter']
     );
 
-    res.status(201).json({ role: 'freelancer', user: result.rows[0] });
+    const newUser = result.rows[0];
+
+    // Send welcome email (non-blocking)
+    fetch(`${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://sympra.app'}/api/email/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'welcome', to: newUser.email, name: newUser.name })
+    }).catch(() => {});
+
+    res.status(201).json({ role: 'freelancer', user: newUser });
   } catch (err) {
     console.error('Register error:', err);
     res.status(500).json({ error: 'Error del servidor' });
