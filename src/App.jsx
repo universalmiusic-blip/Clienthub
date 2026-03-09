@@ -1133,7 +1133,31 @@ function Login({ onLogin, lang, setLang }) {
   const TL = { es:{welcome:"Bienvenido a tu",portal:"Portal",sub:"El hub de trabajo entre freelancers y sus clientes.",emailL:"Correo electrónico",passL:"Contraseña",enter:"Ingresar",loading:"Verificando...",err:"Credenciales incorrectas",demo:"Cuentas demo",use:"Usar →"},en:{welcome:"Welcome to your",portal:"Portal",sub:"The workspace hub for freelancers and their clients.",emailL:"Email address",passL:"Password",enter:"Sign in",loading:"Verifying...",err:"Incorrect credentials",demo:"Demo accounts",use:"Use →"}};
   const t = TL[lang];
   const demos = [{label:"Freelancer",email:"carlos@sympra.app",pass:"admin"},{label:"Ana (cliente)",email:"ana@empresa.com",pass:"1234"},{label:"John (cliente)",email:"john@company.com",pass:"5678"},{label:"Lucía (cliente)",email:"lucia@bloom.co",pass:"9999"}];
-  const doLogin = async () => { if(!email||!pass)return; setLoading(true);setErr(""); await new Promise(r=>setTimeout(r,700)); if(email===DB.freelancer.email&&pass===DB.freelancer.password){onLogin("freelancer",null);return;} const cl=DB.clients.find(c=>c.email===email.toLowerCase()&&c.password===pass); if(cl){onLogin("client",cl);return;} setErr(t.err);setLoading(false); };
+  const doLogin = async () => {
+    if(!email||!pass) return;
+    setLoading(true); setErr("");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.toLowerCase(), password: pass })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        onLogin(data.role, data.user);
+      } else {
+        setErr(data.error || t.err);
+        setLoading(false);
+      }
+    } catch(e) {
+      // Fallback to demo data if API fails
+      if(email===DB.freelancer.email&&pass===DB.freelancer.password){onLogin("freelancer",null);return;}
+      const cl=DB.clients.find(c=>c.email===email.toLowerCase()&&c.password===pass);
+      if(cl){onLogin("client",cl);return;}
+      setErr(t.err);
+      setLoading(false);
+    }
+  };
   return (
     <div className="login-wrap">
       <div className="login-art"><div className="art-grid"/><div className="art-orb o1"/><div className="art-orb o2"/><div className="art-inner"><div className="art-logo">Sym<em>pra</em></div><div className="art-sub">{t.sub}</div><div className="art-cards">{[{ic:"🎨",col:"#7c3aed",l:"Rediseño Web",s:lang==="es"?"65% completado":"65% done"},{ic:"⚡",col:"#0ea5e9",l:"SaaS MVP",s:lang==="es"?"En desarrollo":"In progress"},{ic:"✅",col:"#10b981",l:"Branding",s:lang==="es"?"Entregado":"Delivered"}].map((c,i)=>(<div className="acard" key={i}><div className="acard-ic" style={{background:`${c.col}22`}}>{c.ic}</div><div className="acard-txt"><strong>{c.l}</strong>{c.s}</div></div>))}</div></div></div>
