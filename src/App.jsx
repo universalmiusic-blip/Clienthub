@@ -999,7 +999,8 @@ function SettingsPage({ db, onLogout, onOpenLegal }) {
         <div className="card">
           <div className="card-title" style={{marginBottom:18}}>🔐 Cuenta</div>
           <div style={{fontSize:13,color:"var(--ink3)",marginBottom:14}}>Correo: <strong style={{color:"var(--ink)"}}>{db.freelancer.email}</strong></div>
-          <div style={{fontSize:13,color:"var(--ink3)",marginBottom:18}}>Plan: <strong style={{color:"var(--ink)"}}>Starter</strong> · <span style={{color:"var(--accent)",cursor:"pointer",fontWeight:600}}>Actualizar a Pro →</span></div>
+          <div style={{fontSize:13,color:"var(--ink3)",marginBottom:18}}>Plan: <strong style={{color:"var(--ink)"}}>Starter</strong> · <a href="https://buy.stripe.com/test_cNibJ34V7eos7Ll7NMgYU00" target="_blank" rel="noreferrer" style={{color:"var(--accent)",cursor:"pointer",fontWeight:600,textDecoration:"none"}}>Actualizar a Pro $19/mes →</a></div>
+          <div style={{fontSize:13,color:"var(--ink3)",marginBottom:18}}>¿Más capacidad? · <a href="https://buy.stripe.com/test_dRm8wR5Zb5RWaXx2tsgYU01" target="_blank" rel="noreferrer" style={{color:"var(--ink3)",cursor:"pointer",fontWeight:600,textDecoration:"none"}}>Agency $49/mes →</a></div>
           <button className="btn btn-outline btn-sm" style={{color:"var(--red)",borderColor:"var(--red)"}} onClick={onLogout}>↩ Cerrar sesión</button>
         </div>
         <div className="card">
