@@ -129,7 +129,31 @@ body{background:var(--paper);color:var(--ink);font-family:'Geist',sans-serif;}
 
 /* ── SHELL ── */
 .shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
-@media(max-width:860px){.shell{grid-template-columns:1fr;}.side{display:none!important;}}
+@media(max-width:860px){
+  .shell{grid-template-columns:1fr;}
+  .side{display:none!important;}
+  .topbar{padding:12px 16px;gap:8px;flex-wrap:wrap;}
+  .topbar-title{font-size:18px;}
+  .main{padding-bottom:80px;}
+  .pg{padding:14px 16px;}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .stat-card{padding:14px 16px;border-radius:14px;}
+  .stat-val{font-size:26px;}
+  .card{padding:16px;border-radius:16px;}
+  .card-hd{margin-bottom:12px;}
+  .two-col{grid-template-columns:1fr;}
+  .modal{padding:20px;border-radius:16px;margin:16px;}
+  .modal-overlay{align-items:flex-end;padding:0;}
+  .modal{border-radius:20px 20px 0 0;max-width:100%;}
+  .btn-sm{font-size:12px;padding:7px 12px;}
+  .mobile-nav{display:flex!important;}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr 1fr;}
+  .stat-val{font-size:22px;}
+  .topbar-title{font-size:16px;}
+  .card-title{font-size:13px;}
+}
 .side{background:var(--ink);color:#fff;padding:24px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
 .side-logo{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:800;letter-spacing:-.5px;color:#fff;margin-bottom:4px;}
 .side-logo em{color:#86efac;font-style:normal;}
@@ -290,7 +314,13 @@ body{background:var(--paper);color:var(--ink);font-family:'Geist',sans-serif;}
 
 /* ── GENERAL ── */
 .pg{padding:26px 28px;}
-@media(max-width:600px){.pg{padding:16px;}}
+@media(max-width:600px){.pg{padding:14px 16px;}}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--paper3);padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200;gap:0;}
+.mobile-nav{box-shadow:0 -4px 20px rgba(0,0,0,.08);}
+.mnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;cursor:pointer;color:var(--ink3);transition:.2s;}
+.mnav-item.active{color:var(--accent);}
+.mnav-icon{font-size:20px;line-height:1;}
+.mnav-label{font-size:9px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
 @media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr);}}
 .scard{background:#fff;border:1px solid var(--paper3);border-radius:var(--r);padding:20px 22px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
@@ -1300,6 +1330,21 @@ function FreelancerShell({ db, dispatch, onLogout }) {
         {view==="settings" && <SettingsPage db={db} onLogout={onLogout} onOpenLegal={setLegalDoc}/>}
         <LegalFooter onOpen={setLegalDoc}/>
       </div>
+      {/* ── MOBILE BOTTOM NAV ── */}
+      <nav className="mobile-nav" style={{display:"flex"}}>
+        {[
+          {v:"overview",  icon:"🏠", label:"Inicio"},
+          {v:"clients",   icon:"👥", label:"Clientes"},
+          {v:"projects",  icon:"🚀", label:"Proyectos"},
+          {v:"invoices",  icon:"🧾", label:"Facturas"},
+          {v:"settings",  icon:"⚙️",  label:"Ajustes"},
+        ].map(item=>(
+          <div key={item.v} className={`mnav-item${view===item.v?" active":""}`} onClick={()=>setView(item.v)}>
+            <span className="mnav-icon">{item.icon}</span>
+            <span className="mnav-label">{item.label}</span>
+          </div>
+        ))}
+      </nav>
     </div>
   );
 }
