@@ -1316,7 +1316,8 @@ export default function SympraApp() {
         break;
       case "markPaid":
         setDb(d => ({ ...d, invoices: d.invoices.map(i => i.id===action.id ? {...i,status:"paid"} : i) }));
-        addToast({ type:"INVOICE_PAID", title:"Factura marcada como pagada", body:`${d => d.invoices.find(i=>i.id===action.id)?.number || "Factura"} · cobrado ✓` });
+        addToast({ type:"INVOICE_PAID", title:"Factura marcada como pagada", body:"Cobrado ✓" });
+        fetch("/api/invoices", {method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:action.id,status:"paid"})}).catch(()=>{});
         break;
       case "approveDeliverable":
         setDb(d => ({ ...d, deliverables: d.deliverables.map(del => del.id===action.id ? {...del,status:"approved"} : del) }));
@@ -1345,15 +1346,49 @@ export default function SympraApp() {
         break;
       case "saveNew": {
         const f = action.form;
-        if(modalType==="task")       setDb(d=>({...d,tasks:[...d.tasks,{id:uid(),projectId:+f.projectId||1,text:f.text||"Nueva tarea",done:false,priority:f.priority||"medium",due:f.due||"2026-04-30"}]}));
-        else if(modalType==="client")setDb(d=>({...d,clients:[...d.clients,{id:uid(),name:f.name||"Nuevo Cliente",company:f.company||"",avatar:(f.name||"NC").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2),email:f.email||"",color:"#6366f1",status:"active",totalBilled:0,joined:"2026-03-08"}]}));
-        else if(modalType==="project"){
-          setDb(d=>({...d,projects:[...d.projects,{id:uid(),clientId:+f.clientId||1,name:f.name||"Nuevo Proyecto",status:"planning",progress:0,phase:"Briefing",budget:+f.budget||0,paid:0,dueDate:f.due||"2026-06-30",color:"#6366f1",priority:"medium"}]}));
-          const cl = db.clients.find(c=>c.id===+f.clientId);
+        const freelancerId = session?.user?.id;
+        if(modalType==="task") {
+          setDb(d=>({...d,tasks:[...d.tasks,{id:uid(),projectId:f.projectId||1,text:f.text||"Nueva tarea",done:false,priority:f.priority||"medium",due:f.due||"2026-04-30"}]}));
+        } else if(modalType==="client") {
+          const avatar = (f.name||"NC").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+          const colors = ["#7c3aed","#0ea5e9","#ec4899","#10b981","#f59e0b"];
+          const color = colors[Math.floor(Math.random()*colors.length)];
+          const newClient = {id:uid(),name:f.name||"Nuevo Cliente",company:f.company||"",avatar,email:f.email||"",color,status:"active",totalBilled:0};
+          setDb(d=>({...d,clients:[...d.clients,newClient]}));
+          if(freelancerId) {
+            fetch("/api/clients", {method:"POST",headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({name:f.name,company:f.company,email:f.email,freelancer_id:freelancerId})
+            }).then(r=>r.json()).then(saved=>{
+              setDb(d=>({...d,clients:d.clients.map(c=>c.id===newClient.id?{...c,id:saved.id}:c)}));
+            }).catch(()=>{});
+          }
+        } else if(modalType==="project") {
+          const colors = ["#7c3aed","#0ea5e9","#ec4899","#10b981","#f59e0b"];
+          const color = colors[Math.floor(Math.random()*colors.length)];
+          const newProject = {id:uid(),clientId:f.clientId,name:f.name||"Nuevo Proyecto",status:"planning",progress:0,phase:"Briefing",budget:+f.budget||0,paid:0,dueDate:f.due||"2026-06-30",color,priority:"medium"};
+          setDb(d=>({...d,projects:[...d.projects,newProject]}));
+          const cl = db.clients.find(c=>c.id===f.clientId);
           addToast({ type:"PROJECT_NEW", title:"Proyecto creado", body:`${f.name||"Nuevo Proyecto"} · ${cl?.name||""}` });
+          if(freelancerId) {
+            fetch("/api/projects", {method:"POST",headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({name:f.name,client_id:f.clientId,freelancer_id:freelancerId,budget:+f.budget||0,due_date:f.due})
+            }).then(r=>r.json()).then(saved=>{
+              setDb(d=>({...d,projects:d.projects.map(p=>p.id===newProject.id?{...p,id:saved.id}:p)}));
+            }).catch(()=>{});
+          }
+        } else if(modalType==="invoice") {
+          const newInvoice = {id:uid(),clientId:f.clientId,projectId:f.projectId,number:`INV-${String(db.invoices.length+1).padStart(3,"0")}`,amount:+f.amount||0,status:"pending",date:new Date().toISOString().slice(0,10),due:f.due||"2026-03-30"};
+          setDb(d=>({...d,invoices:[...d.invoices,newInvoice]}));
+          if(freelancerId) {
+            fetch("/api/invoices", {method:"POST",headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({freelancer_id:freelancerId,client_id:f.clientId,project_id:f.projectId,amount:+f.amount||0,due_date:f.due})
+            }).then(r=>r.json()).then(saved=>{
+              setDb(d=>({...d,invoices:d.invoices.map(i=>i.id===newInvoice.id?{...i,id:saved.id,number:saved.number}:i)}));
+            }).catch(()=>{});
+          }
+        } else if(modalType==="deliverable") {
+          setDb(d=>({...d,deliverables:[...d.deliverables,{id:uid(),projectId:f.projectId||action.extra?.projectId,name:f.name||"Entregable",status:"pending",date:f.date||"2026-04-01"}]}));
         }
-        else if(modalType==="invoice")setDb(d=>({...d,invoices:[...d.invoices,{id:uid(),clientId:+f.clientId||1,projectId:+f.projectId||1,number:`INV-${String(d.invoices.length+1).padStart(3,"0")}`,amount:+f.amount||0,status:"pending",date:"2026-03-08",due:f.due||"2026-03-22"}]}));
-        else if(modalType==="deliverable")setDb(d=>({...d,deliverables:[...d.deliverables,{id:uid(),projectId:+f.projectId||action.extra?.projectId||1,name:f.name||"Entregable",status:"pending",date:f.date||"2026-04-01"}]}));
         setModalType(null);
         break;
       }
