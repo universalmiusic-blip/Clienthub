@@ -1,0 +1,340 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+// ============================================================
+//  CLIENTHUB — DOCUMENTOS LEGALES
+//  Pega este componente al final de clienthub-v2.jsx
+//  y agrega los links en el footer de la app
+// ============================================================
+
+// ── DATOS DEL PROPIETARIO ────────────────────────────────────
+// Nombre:  Anthony Daniel Paulino Castillo
+// País:    Estados Unidos
+// Año:     2026
+// Producto: ClientHub
+// ────────────────────────────────────────────────────────────
+
+const LEGAL_DOCS = {
+
+  terms: `
+TÉRMINOS Y CONDICIONES DE USO — CLIENTHUB
+
+Última actualización: marzo 2026
+
+1. ACEPTACIÓN DE LOS TÉRMINOS
+
+Al acceder o usar ClientHub ("el Servicio"), usted acepta quedar vinculado por estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, no podrá acceder al Servicio.
+
+2. DESCRIPCIÓN DEL SERVICIO
+
+ClientHub es una plataforma de gestión de proyectos, clientes y facturación diseñada para freelancers y profesionales independientes. El Servicio permite gestionar proyectos, comunicarse con clientes, emitir facturas y hacer seguimiento de tareas.
+
+3. CUENTAS DE USUARIO
+
+3.1 Usted es responsable de mantener la confidencialidad de su cuenta y contraseña.
+3.2 Usted es responsable de todas las actividades que ocurran bajo su cuenta.
+3.3 Debe notificarnos inmediatamente de cualquier uso no autorizado de su cuenta.
+3.4 Debe tener al menos 18 años para usar este Servicio.
+
+4. USO ACEPTABLE
+
+Usted acepta NO usar ClientHub para:
+- Actividades ilegales o fraudulentas
+- Enviar spam o comunicaciones no solicitadas
+- Violar derechos de propiedad intelectual de terceros
+- Transmitir virus o código malicioso
+- Interferir con el funcionamiento del Servicio
+
+5. PROPIEDAD INTELECTUAL
+
+5.1 ClientHub y todo su contenido, características y funcionalidad son propiedad exclusiva de Anthony Daniel Paulino Castillo y están protegidos por las leyes de derechos de autor de los Estados Unidos.
+5.2 Usted no puede copiar, modificar, distribuir o vender ninguna parte del Servicio sin autorización escrita previa.
+
+6. DATOS Y PRIVACIDAD
+
+El uso de sus datos personales se rige por nuestra Política de Privacidad, que forma parte integral de estos Términos.
+
+7. FACTURACIÓN Y PAGOS
+
+7.1 Los precios del Servicio están sujetos a cambios con previo aviso de 30 días.
+7.2 Los pagos no son reembolsables salvo lo indicado en nuestra Política de Reembolso.
+7.3 Usted es responsable de los impuestos aplicables en su jurisdicción.
+
+8. LIMITACIÓN DE RESPONSABILIDAD
+
+En ningún caso Anthony Daniel Paulino Castillo será responsable por daños indirectos, incidentales, especiales o consecuentes que resulten del uso o la imposibilidad de usar el Servicio.
+
+9. TERMINACIÓN
+
+Nos reservamos el derecho de suspender o terminar su acceso al Servicio en cualquier momento, con o sin causa, con o sin previo aviso.
+
+10. LEY APLICABLE
+
+Estos Términos se rigen por las leyes del Estado de Nueva York, Estados Unidos, sin perjuicio de sus disposiciones sobre conflicto de leyes.
+
+11. CONTACTO
+
+Para preguntas sobre estos Términos, contáctenos en:
+Anthony Daniel Paulino Castillo
+ClientHub
+Estados Unidos
+support@clienthub.app
+`,
+
+  privacy: `
+POLÍTICA DE PRIVACIDAD — CLIENTHUB
+
+Última actualización: marzo 2026
+
+1. INTRODUCCIÓN
+
+Anthony Daniel Paulino Castillo ("nosotros", "nuestro") opera ClientHub. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos su información personal.
+
+2. INFORMACIÓN QUE RECOPILAMOS
+
+2.1 Información que usted nos proporciona:
+- Nombre completo y dirección de correo electrónico
+- Información de su empresa o negocio
+- Datos de facturación y pagos
+- Contenido que sube al Servicio (proyectos, mensajes, archivos)
+
+2.2 Información recopilada automáticamente:
+- Dirección IP y tipo de navegador
+- Páginas visitadas y tiempo de uso
+- Cookies y tecnologías similares
+
+3. CÓMO USAMOS SU INFORMACIÓN
+
+Usamos su información para:
+- Proveer y mejorar el Servicio
+- Procesar pagos y transacciones
+- Enviar notificaciones relacionadas con el Servicio
+- Responder a sus consultas y soporte
+- Cumplir obligaciones legales
+
+4. COMPARTIR INFORMACIÓN
+
+No vendemos, alquilamos ni compartimos su información personal con terceros, excepto:
+- Con su consentimiento explícito
+- Para cumplir obligaciones legales
+- Con proveedores de servicios que nos ayudan a operar (bajo acuerdos de confidencialidad)
+
+5. SEGURIDAD DE LOS DATOS
+
+Implementamos medidas de seguridad técnicas y organizativas para proteger su información, incluyendo encriptación SSL, acceso restringido y monitoreo continuo.
+
+6. RETENCIÓN DE DATOS
+
+Conservamos su información mientras su cuenta esté activa o sea necesario para proveer el Servicio. Puede solicitar la eliminación de su cuenta y datos en cualquier momento.
+
+7. SUS DERECHOS
+
+Usted tiene derecho a:
+- Acceder a su información personal
+- Corregir datos inexactos
+- Solicitar la eliminación de sus datos
+- Oponerse al procesamiento de sus datos
+- Portabilidad de sus datos
+
+8. COOKIES
+
+Usamos cookies esenciales para el funcionamiento del Servicio. Puede controlar las cookies desde la configuración de su navegador.
+
+9. MENORES DE EDAD
+
+ClientHub no está dirigido a menores de 18 años y no recopilamos intencionalmente información de menores.
+
+10. CAMBIOS A ESTA POLÍTICA
+
+Notificaremos cambios importantes a esta Política por correo electrónico o mediante aviso en el Servicio con al menos 30 días de anticipación.
+
+11. CONTACTO
+
+Para ejercer sus derechos o hacer preguntas sobre privacidad:
+Anthony Daniel Paulino Castillo
+ClientHub — Estados Unidos
+privacy@clienthub.app
+`,
+
+  copyright: `
+DERECHOS DE AUTOR — CLIENTHUB
+
+© 2026 Anthony Daniel Paulino Castillo. Todos los derechos reservados.
+
+AVISO DE DERECHOS DE AUTOR
+
+ClientHub, incluyendo su nombre, logotipo, diseño, código fuente, interfaces, contenido, documentación y todos los elementos que lo componen, son propiedad intelectual exclusiva de Anthony Daniel Paulino Castillo, protegida bajo las leyes de derechos de autor de los Estados Unidos (United States Copyright Act, 17 U.S.C.) y tratados internacionales de propiedad intelectual.
+
+PROHIBICIONES
+
+Queda estrictamente prohibido, sin autorización escrita previa de Anthony Daniel Paulino Castillo:
+
+1. Copiar, reproducir o duplicar cualquier parte del Servicio
+2. Modificar, adaptar o crear obras derivadas
+3. Distribuir, vender, sublicenciar o transferir el Servicio
+4. Realizar ingeniería inversa del código fuente
+5. Eliminar o alterar avisos de derechos de autor
+6. Usar el nombre "ClientHub" o sus logotipos sin autorización
+
+LICENCIA LIMITADA DE USO
+
+Se otorga al usuario una licencia limitada, no exclusiva, no transferible y revocable para usar el Servicio exclusivamente para sus fines comerciales legítimos como freelancer o profesional independiente, de acuerdo con estos términos.
+
+MARCAS COMERCIALES
+
+"ClientHub" es marca comercial de Anthony Daniel Paulino Castillo en los Estados Unidos. Todos los demás nombres de productos o servicios mencionados son marcas de sus respectivos propietarios.
+
+INFRACCIÓN DE DERECHOS
+
+Si cree que su trabajo ha sido copiado de una manera que constituye una infracción de derechos de autor, contáctenos en:
+
+Anthony Daniel Paulino Castillo
+ClientHub
+Estados Unidos
+legal@clienthub.app
+
+VIGENCIA
+
+Este aviso de derechos de autor es efectivo desde enero de 2026 y permanece vigente indefinidamente.
+`
+};
+
+// ============================================================
+//  COMPONENTE — MODAL LEGAL
+//  Agregar esto dentro del componente principal de la app
+// ============================================================
+
+function LegalModal({ doc, onClose }) {
+  const titles = {
+    terms:     "Términos y Condiciones",
+    privacy:   "Política de Privacidad",
+    copyright: "Derechos de Autor"
+  };
+  return (
+    <div style={{
+      position:"fixed",inset:0,background:"rgba(0,0,0,.5)",
+      backdropFilter:"blur(6px)",display:"flex",alignItems:"center",
+      justifyContent:"center",zIndex:9999,padding:20
+    }} onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div style={{
+        background:"#fff",borderRadius:20,width:"100%",maxWidth:640,
+        maxHeight:"80vh",overflow:"hidden",display:"flex",flexDirection:"column",
+        boxShadow:"0 20px 80px rgba(0,0,0,.2)"
+      }}>
+        {/* Header */}
+        <div style={{
+          padding:"20px 24px",borderBottom:"1px solid #e8e5de",
+          display:"flex",alignItems:"center",justifyContent:"space-between"
+        }}>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:18,fontWeight:800}}>
+            {titles[doc]}
+          </div>
+          <button onClick={onClose} style={{
+            width:30,height:30,borderRadius:"50%",border:"none",
+            background:"#f2f0eb",cursor:"pointer",fontSize:14,color:"#9a9690"
+          }}>✕</button>
+        </div>
+        {/* Content */}
+        <div style={{
+          padding:"20px 24px",overflowY:"auto",flex:1,
+          fontSize:13,lineHeight:1.7,color:"#4a4840",whiteSpace:"pre-wrap",
+          fontFamily:"'Geist',sans-serif"
+        }}>
+          {LEGAL_DOCS[doc]}
+        </div>
+        {/* Footer */}
+        <div style={{
+          padding:"14px 24px",borderTop:"1px solid #e8e5de",
+          display:"flex",justifyContent:"space-between",alignItems:"center"
+        }}>
+          <div style={{fontSize:11,color:"#9a9690"}}>
+            © 2026 Anthony Daniel Paulino Castillo
+          </div>
+          <button onClick={onClose} style={{
+            padding:"8px 20px",borderRadius:20,border:"none",
+            background:"#0f0e0c",color:"#fff",fontSize:13,
+            fontWeight:600,cursor:"pointer",fontFamily:"'Geist',sans-serif"
+          }}>Cerrar</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+//  FOOTER LEGAL — agregar al final del Login y de la app
+//  Ejemplo de uso:
+//
+//  const [legalDoc, setLegalDoc] = useState(null);
+//
+//  <LegalFooter onOpen={setLegalDoc} />
+//  {legalDoc && <LegalModal doc={legalDoc} onClose={()=>setLegalDoc(null)} />}
+// ============================================================
+
+function LegalFooter({ onOpen }) {
+  return (
+    <div style={{
+      padding:"16px 24px",
+      borderTop:"1px solid #e8e5de",
+      display:"flex",alignItems:"center",
+      justifyContent:"center",
+      gap:20,flexWrap:"wrap",
+      background:"#faf9f6"
+    }}>
+      <span style={{fontSize:12,color:"#9a9690"}}>
+        © 2026 Anthony Daniel Paulino Castillo
+      </span>
+      {[
+        {k:"terms",    l:"Términos de Uso"},
+        {k:"privacy",  l:"Privacidad"},
+        {k:"copyright",l:"Derechos de Autor"},
+      ].map(item => (
+        <button key={item.k} onClick={()=>onOpen(item.k)} style={{
+          background:"none",border:"none",
+          fontSize:12,color:"#6d6b65",cursor:"pointer",
+          textDecoration:"underline",fontFamily:"'Geist',sans-serif",
+          padding:0
+        }}>{item.l}</button>
+      ))}
+    </div>
+  );
+}
