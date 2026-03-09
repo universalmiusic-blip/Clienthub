@@ -1329,6 +1329,71 @@ export default function SympraApp() {
     setTimeout(() => setToasts(ts => ts.filter(t => t.id !== id)), 300);
   };
 
+  // ── LOAD REAL DATA FROM NEON ─────────────────────────────
+  useEffect(() => {
+    if (!session || session.role !== "freelancer" || !session.user?.id) return;
+    const freelancerId = session.user.id;
+    // Update freelancer name in DB
+    setDb(d => ({
+      ...d,
+      freelancer: {
+        ...d.freelancer,
+        name: session.user.name || d.freelancer.name,
+        email: session.user.email || d.freelancer.email,
+        monthlyGoal: session.user.monthly_goal || d.freelancer.monthlyGoal,
+      }
+    }));
+    // Load clients from Neon
+    fetch(`/api/clients?freelancerId=${freelancerId}`)
+      .then(r => r.json())
+      .then(clients => {
+        if (Array.isArray(clients) && clients.length > 0) {
+          const mapped = clients.map(c => ({
+            id: c.id, name: c.name, company: c.company || "", email: c.email || "",
+            avatar: (c.name||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2),
+            color: c.avatar_color || "#6366f1", status: c.status || "active",
+            totalBilled: parseFloat(c.total_billed) || 0, password: c.password || "1234"
+          }));
+          setDb(d => ({ ...d, clients: mapped }));
+        } else {
+          setDb(d => ({ ...d, clients: [] }));
+        }
+      }).catch(() => {});
+    // Load projects from Neon
+    fetch(`/api/projects?freelancerId=${freelancerId}`)
+      .then(r => r.json())
+      .then(projects => {
+        if (Array.isArray(projects) && projects.length > 0) {
+          const mapped = projects.map(p => ({
+            id: p.id, clientId: p.client_id, name: p.name,
+            status: p.status || "planning", progress: p.progress || 0,
+            phase: p.phase || "Briefing", budget: parseFloat(p.budget) || 0,
+            paid: parseFloat(p.paid) || 0, dueDate: p.due_date || "2026-06-30",
+            color: p.color || "#6366f1", priority: p.priority || "medium"
+          }));
+          setDb(d => ({ ...d, projects: mapped }));
+        } else {
+          setDb(d => ({ ...d, projects: [] }));
+        }
+      }).catch(() => {});
+    // Load invoices from Neon
+    fetch(`/api/invoices?freelancerId=${freelancerId}`)
+      .then(r => r.json())
+      .then(invoices => {
+        if (Array.isArray(invoices) && invoices.length > 0) {
+          const mapped = invoices.map(i => ({
+            id: i.id, clientId: i.client_id, projectId: i.project_id,
+            number: i.number, amount: parseFloat(i.amount) || 0,
+            status: i.status || "pending", date: i.created_at?.slice(0,10) || "2026-03-01",
+            due: i.due_date || "2026-03-30"
+          }));
+          setDb(d => ({ ...d, invoices: mapped }));
+        } else {
+          setDb(d => ({ ...d, invoices: [] }));
+        }
+      }).catch(() => {});
+  }, [session]);
+
   // ── SIMULATE INCOMING EVENTS ──────────────────────────────
   useEffect(() => {
     if (!session || session.role !== "freelancer") return;
@@ -1438,7 +1503,7 @@ export default function SympraApp() {
   return (
     <>
       <style>{CSS}</style>
-      {!session && <Login lang={lang} setLang={setLang} onLogin={(role,client)=>setSession({role,client})}/>}
+      {!session && <Login lang={lang} setLang={setLang} onLogin={(role,user)=>setSession({role,user,client:user})}/>}
       {session?.role==="freelancer" && <FreelancerShell db={db} dispatch={dispatch} onLogout={()=>setSession(null)}/>}
       {session?.role==="client"     && <ClientPortal client={session.client} db={db} dispatch={dispatch} onLogout={()=>setSession(null)} lang={lang} setLang={setLang}/>}
       {modalType && MODAL_CFGS[modalType] && <FormModal cfg={MODAL_CFGS[modalType]} data={db} onClose={()=>setModalType(null)} onSave={form=>dispatch({type:"saveNew",form})}/>}
