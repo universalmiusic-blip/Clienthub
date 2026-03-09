@@ -1,5 +1,10 @@
 {
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/sympra-landing.html" },
+    { "src": "/app", "dest": "/index.html" },
+    { "src": "/app/(.*)", "dest": "/index.html" }
   ]
 }
