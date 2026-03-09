@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClientHub — El workspace para freelancers serios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0d0c0a;
+  --ink2:#3d3b36;
+  --ink3:#7a7870;
+  --paper:#f7f5f0;
+  --paper2:#efece5;
+  --paper3:#e3e0d8;
+  --white:#ffffff;
+  --green:#15803d;
+  --green-l:#f0fdf4;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'Geist',sans-serif;overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:18px 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(247,245,240,0.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  transition:background .3s;
+}
+.nav-logo{
+  font-family:'Instrument Serif',serif;
+  font-size:22px;color:var(--ink);letter-spacing:-.3px;
+}
+.nav-logo em{color:var(--green);font-style:normal;}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:13.5px;color:var(--ink3);text-decoration:none;transition:color .15s;font-weight:500;}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{
+  background:var(--ink);color:var(--white);
+  padding:9px 22px;border-radius:100px;
+  font-size:13.5px;font-weight:600;text-decoration:none;
+  transition:all .2s;
+  border:none;cursor:pointer;font-family:'Geist',sans-serif;
+}
+.nav-cta:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,12,10,.2);}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 5% 80px;
+  position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(21,128,61,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 60%, rgba(13,12,10,.03) 0%, transparent 60%);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(13,12,10,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(13,12,10,.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 80%);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--white);border:1px solid var(--paper3);
+  border-radius:100px;padding:6px 16px;
+  font-size:12.5px;color:var(--ink2);font-weight:500;
+  margin-bottom:32px;
+  animation:fadeUp .6s ease both;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.hero-h{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(52px,8vw,96px);
+  line-height:1.0;
+  letter-spacing:-3px;
+  color:var(--ink);
+  margin-bottom:10px;
+  animation:fadeUp .6s .1s ease both;
+}
+.hero-h em{color:var(--green);font-style:italic;}
+.hero-sub{
+  font-size:clamp(16px,2vw,19px);
+  color:var(--ink3);
+  max-width:520px;
+  line-height:1.65;
+  margin:0 auto 44px;
+  font-weight:400;
+  animation:fadeUp .6s .2s ease both;
+}
+.hero-actions{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  animation:fadeUp .6s .3s ease both;
+  margin-bottom:72px;
+}
+.btn-primary{
+  background:var(--ink);color:var(--white);
+  padding:15px 32px;border-radius:100px;
+  font-size:15px;font-weight:600;text-decoration:none;
+  transition:all .2s;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Geist',sans-serif;border:none;cursor:pointer;
+}
+.btn-primary:hover{background:var(--ink2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(13,12,10,.2);}
+.btn-secondary{
+  background:transparent;color:var(--ink);
+  padding:15px 32px;border-radius:100px;
+  font-size:15px;font-weight:500;text-decoration:none;
+  border:1.5px solid var(--paper3);
+  transition:all .2s;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Geist',sans-serif;cursor:pointer;
+}
+.btn-secondary:hover{background:var(--white);border-color:var(--ink);}
+
+/* ── HERO MOCKUP ── */
+.hero-mockup{
+  width:100%;max-width:900px;
+  background:var(--white);
+  border:1px solid var(--paper3);
+  border-radius:20px;
+  box-shadow:0 40px 120px rgba(13,12,10,.14),0 2px 4px rgba(13,12,10,.06);
+  overflow:hidden;
+  animation:fadeUp .7s .4s ease both;
+  position:relative;
+}
+.mockup-bar{
+  background:var(--paper2);
+  padding:12px 16px;
+  display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--paper3);
+}
+.mock-dot{width:10px;height:10px;border-radius:50%;}
+.mock-d1{background:#ef4444;}.mock-d2{background:#f59e0b;}.mock-d3{background:#22c55e;}
+.mockup-bar-url{
+  flex:1;background:var(--white);border-radius:6px;
+  padding:5px 12px;font-size:12px;color:var(--ink3);
+  border:1px solid var(--paper3);margin-left:8px;max-width:260px;
+}
+.mockup-content{
+  display:grid;grid-template-columns:180px 1fr;min-height:360px;
+}
+.mock-sidebar{
+  background:var(--ink);padding:20px 14px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.mock-logo-sm{
+  font-family:'Instrument Serif',serif;font-size:16px;color:white;
+  margin-bottom:18px;padding-left:4px;
+}
+.mock-logo-sm em{color:#86efac;font-style:normal;}
+.mock-nav-item{
+  padding:7px 10px;border-radius:7px;font-size:11.5px;
+  color:rgba(255,255,255,.45);display:flex;align-items:center;gap:7px;
+}
+.mock-nav-item.active{background:rgba(255,255,255,.1);color:white;}
+.mock-main{background:var(--paper);padding:20px;}
+.mock-title{font-family:'Instrument Serif',serif;font-size:18px;letter-spacing:-.3px;margin-bottom:14px;}
+.mock-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.mock-stat{
+  background:white;border:1px solid var(--paper3);border-radius:8px;
+  padding:10px 12px;
+}
+.mock-stat-n{font-size:10px;color:var(--ink3);margin-bottom:4px;}
+.mock-stat-v{font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink);}
+.mock-projects{display:flex;flex-direction:column;gap:7px;}
+.mock-proj{
+  background:white;border:1px solid var(--paper3);border-radius:8px;
+  padding:10px 12px;display:flex;align-items:center;gap:10px;
+}
+.mock-proj-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.mock-proj-info{flex:1;}
+.mock-proj-name{font-size:11.5px;font-weight:600;color:var(--ink);}
+.mock-proj-sub{font-size:10px;color:var(--ink3);}
+.mock-bar{width:60px;height:4px;background:var(--paper2);border-radius:2px;overflow:hidden;}
+.mock-fill{height:100%;border-radius:2px;}
+
+/* ── LOGOS ── */
+.logos{
+  padding:40px 5%;text-align:center;
+  border-top:1px solid var(--paper3);
+  border-bottom:1px solid var(--paper3);
+}
+.logos-label{font-size:12px;color:var(--ink3);font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-bottom:24px;}
+.logos-row{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;}
+.logo-item{
+  font-family:'Instrument Serif',serif;font-size:16px;
+  color:var(--ink3);opacity:.5;letter-spacing:-.2px;
+  transition:opacity .2s;
+}
+.logo-item:hover{opacity:.8;}
+
+/* ── SECTIONS ── */
+section{padding:100px 5%;}
+
+/* ── PROBLEM ── */
+.problem{background:var(--ink);color:white;}
+.problem-inner{max-width:1000px;margin:0 auto;}
+.section-label{
+  font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:16px;
+}
+.problem .section-label{color:rgba(255,255,255,.35);}
+.problem-h{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(36px,5vw,58px);
+  letter-spacing:-1.5px;line-height:1.1;
+  color:white;margin-bottom:20px;
+}
+.problem-h em{color:#86efac;font-style:italic;}
+.problem-sub{font-size:17px;color:rgba(255,255,255,.5);max-width:560px;line-height:1.65;margin-bottom:60px;}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:760px){.pain-grid{grid-template-columns:1fr;}}
+.pain-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:28px 24px;
+}
+.pain-icon{font-size:28px;margin-bottom:14px;}
+.pain-title{font-size:15px;font-weight:600;color:white;margin-bottom:8px;}
+.pain-text{font-size:13.5px;color:rgba(255,255,255,.45);line-height:1.6;}
+
+/* ── FEATURES ── */
+.features-inner{max-width:1100px;margin:0 auto;}
+.features-h{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(34px,4.5vw,54px);
+  letter-spacing:-1.5px;line-height:1.1;
+  color:var(--ink);margin-bottom:16px;
+}
+.features-sub{font-size:16px;color:var(--ink3);max-width:480px;line-height:1.65;margin-bottom:64px;}
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+@media(max-width:760px){.feat-grid{grid-template-columns:1fr;}}
+.feat-card{
+  background:var(--white);border:1px solid var(--paper3);border-radius:20px;
+  padding:32px 28px;
+  transition:transform .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.feat-card:hover{transform:translateY(-3px);box-shadow:0 20px 48px rgba(13,12,10,.1);}
+.feat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0;
+}
+.feat-card:nth-child(1)::before{background:#15803d;}
+.feat-card:nth-child(2)::before{background:#1d4ed8;}
+.feat-card:nth-child(3)::before{background:#7c3aed;}
+.feat-card:nth-child(4)::before{background:#be185d;}
+.feat-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:18px;
+}
+.feat-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.3px;}
+.feat-text{font-size:14px;color:var(--ink3);line-height:1.65;}
+.feat-list{margin-top:14px;display:flex;flex-direction:column;gap:6px;}
+.feat-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);}
+.feat-item::before{content:'✓';color:var(--green);font-weight:700;font-size:12px;}
+
+/* ── HOW IT WORKS ── */
+.how{background:var(--paper2);}
+.how-inner{max-width:900px;margin:0 auto;text-align:center;}
+.how-h{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(34px,4.5vw,52px);
+  letter-spacing:-1.5px;color:var(--ink);margin-bottom:16px;
+}
+.how-sub{font-size:16px;color:var(--ink3);max-width:420px;margin:0 auto 64px;line-height:1.65;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;position:relative;}
+@media(max-width:700px){.steps{grid-template-columns:1fr;gap:20px;}}
+.steps::before{
+  content:'';
+  position:absolute;top:28px;left:calc(16.66% + 24px);right:calc(16.66% + 24px);
+  height:1px;background:linear-gradient(90deg,var(--paper3),var(--paper3));
+  border-top:1.5px dashed var(--paper3);
+}
+@media(max-width:700px){.steps::before{display:none;}}
+.step{text-align:center;}
+.step-num{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--ink);color:white;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Instrument Serif',serif;font-size:22px;
+  margin:0 auto 20px;position:relative;z-index:1;
+}
+.step-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.2px;}
+.step-text{font-size:13.5px;color:var(--ink3);line-height:1.6;}
+
+/* ── PRICING ── */
+.pricing-inner{max-width:960px;margin:0 auto;text-align:center;}
+.pricing-h{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(34px,4.5vw,52px);
+  letter-spacing:-1.5px;color:var(--ink);margin-bottom:16px;
+}
+.pricing-sub{font-size:16px;color:var(--ink3);margin-bottom:56px;line-height:1.65;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:left;}
+@media(max-width:760px){.pricing-grid{grid-template-columns:1fr;}}
+.price-card{
+  background:var(--white);border:1.5px solid var(--paper3);
+  border-radius:20px;padding:32px 28px;
+  transition:transform .2s;
+}
+.price-card:hover{transform:translateY(-2px);}
+.price-card.featured{
+  background:var(--ink);border-color:var(--ink);
+  transform:scale(1.03);
+}
+.price-card.featured:hover{transform:scale(1.03) translateY(-2px);}
+.price-badge{
+  display:inline-block;background:var(--green-l);color:var(--green);
+  font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;margin-bottom:18px;
+}
+.price-card.featured .price-badge{background:rgba(134,239,172,.15);color:#86efac;}
+.price-plan{font-size:13px;font-weight:600;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;}
+.price-card.featured .price-plan{color:rgba(255,255,255,.45);}
+.price-amount{
+  font-family:'Instrument Serif',serif;
+  font-size:48px;letter-spacing:-2px;color:var(--ink);
+  display:flex;align-items:flex-start;gap:4px;margin-bottom:4px;
+}
+.price-card.featured .price-amount{color:white;}
+.price-sign{font-size:24px;margin-top:10px;}
+.price-period{font-size:13px;color:var(--ink3);margin-bottom:24px;font-weight:400;}
+.price-card.featured .price-period{color:rgba(255,255,255,.4);}
+.price-divider{height:1px;background:var(--paper3);margin-bottom:24px;}
+.price-card.featured .price-divider{background:rgba(255,255,255,.1);}
+.price-feature{
+  display:flex;align-items:center;gap:9px;
+  font-size:13.5px;color:var(--ink2);margin-bottom:10px;
+}
+.price-card.featured .price-feature{color:rgba(255,255,255,.7);}
+.price-check{color:var(--green);font-weight:700;}
+.price-card.featured .price-check{color:#86efac;}
+.price-x{color:var(--paper3);font-weight:700;}
+.price-cta{
+  display:block;text-align:center;margin-top:28px;
+  padding:13px;border-radius:100px;font-size:14px;font-weight:600;
+  text-decoration:none;transition:all .2s;font-family:'Geist',sans-serif;
+  border:1.5px solid var(--paper3);color:var(--ink);background:transparent;cursor:pointer;
+}
+.price-cta:hover{background:var(--paper2);}
+.price-card.featured .price-cta{
+  background:white;color:var(--ink);border-color:white;
+}
+.price-card.featured .price-cta:hover{background:var(--paper2);}
+
+/* ── TESTIMONIALS ── */
+.testimonials{background:var(--ink);}
+.test-inner{max-width:1000px;margin:0 auto;}
+.test-h{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(32px,4vw,48px);
+  letter-spacing:-1.5px;color:white;
+  margin-bottom:52px;text-align:center;
+}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:760px){.test-grid{grid-template-columns:1fr;}}
+.test-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:28px 24px;
+}
+.test-stars{color:#fbbf24;font-size:13px;margin-bottom:14px;letter-spacing:2px;}
+.test-quote{font-size:14px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:20px;font-style:italic;}
+.test-author{display:flex;align-items:center;gap:10px;}
+.test-av{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Instrument Serif',serif;font-size:13px;
+  font-weight:400;color:var(--ink);flex-shrink:0;
+}
+.test-name{font-size:13px;font-weight:600;color:white;}
+.test-title{font-size:11.5px;color:rgba(255,255,255,.35);}
+
+/* ── CTA FINAL ── */
+.cta-final{
+  text-align:center;padding:120px 5%;
+  background:var(--paper);
+}
+.cta-h{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(40px,6vw,72px);
+  letter-spacing:-2px;line-height:1.05;
+  color:var(--ink);margin-bottom:20px;
+}
+.cta-h em{color:var(--green);font-style:italic;}
+.cta-sub{font-size:17px;color:var(--ink3);max-width:460px;margin:0 auto 40px;line-height:1.65;}
+.cta-fine{font-size:12.5px;color:var(--ink3);margin-top:16px;}
+
+/* ── ONBOARDING MODAL ── */
+.ob-overlay{
+  position:fixed;inset:0;background:rgba(13,12,10,.5);
+  backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:500;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.ob-overlay.show{opacity:1;pointer-events:all;}
+.ob-modal{
+  background:var(--white);border-radius:24px;
+  width:100%;max-width:520px;
+  overflow:hidden;
+  transform:translateY(20px) scale(.97);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 32px 100px rgba(13,12,10,.2);
+}
+.ob-overlay.show .ob-modal{transform:none;}
+.ob-progress{height:3px;background:var(--paper2);}
+.ob-progress-fill{height:100%;background:var(--ink);transition:width .4s ease;}
+.ob-body{padding:40px 36px;}
+.ob-step-label{font-size:11px;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+.ob-title{
+  font-family:'Instrument Serif',serif;
+  font-size:28px;letter-spacing:-.7px;color:var(--ink);margin-bottom:8px;
+}
+.ob-sub{font-size:14px;color:var(--ink3);line-height:1.6;margin-bottom:32px;}
+.ob-field{margin-bottom:16px;}
+.ob-lbl{display:block;font-size:12px;font-weight:500;color:var(--ink2);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase;}
+.ob-inp{
+  width:100%;padding:12px 14px;
+  border:1.5px solid var(--paper3);border-radius:10px;
+  background:var(--paper);color:var(--ink);
+  font-family:'Geist',sans-serif;font-size:14px;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.ob-inp:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(13,12,10,.07);}
+.ob-inp::placeholder{color:var(--paper3);}
+.ob-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ob-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+.ob-type{
+  border:1.5px solid var(--paper3);border-radius:12px;
+  padding:14px 16px;cursor:pointer;transition:all .15s;
+  text-align:center;
+}
+.ob-type:hover{border-color:var(--ink);background:var(--paper2);}
+.ob-type.sel{border-color:var(--ink);background:var(--ink);}
+.ob-type.sel .ob-type-ic,.ob-type.sel .ob-type-lbl{color:white!important;}
+.ob-type-ic{font-size:22px;margin-bottom:6px;}
+.ob-type-lbl{font-size:12.5px;font-weight:600;color:var(--ink);}
+.ob-actions{display:flex;gap:10px;margin-top:28px;}
+.ob-back{
+  flex:1;padding:13px;border-radius:100px;
+  border:1.5px solid var(--paper3);background:transparent;
+  color:var(--ink2);font-size:14px;font-weight:600;cursor:pointer;
+  font-family:'Geist',sans-serif;transition:all .15s;
+}
+.ob-back:hover{background:var(--paper2);}
+.ob-next{
+  flex:2;padding:13px;border-radius:100px;
+  border:none;background:var(--ink);
+  color:white;font-size:14px;font-weight:600;cursor:pointer;
+  font-family:'Geist',sans-serif;transition:all .15s;
+}
+.ob-next:hover{background:#2d2c29;}
+.ob-success{text-align:center;padding:20px 0;}
+.ob-success-icon{font-size:56px;margin-bottom:16px;}
+.ob-success-h{font-family:'Instrument Serif',serif;font-size:26px;letter-spacing:-.5px;margin-bottom:8px;}
+.ob-success-p{font-size:14px;color:var(--ink3);line-height:1.65;margin-bottom:28px;}
+.ob-launch{
+  width:100%;padding:15px;border-radius:100px;
+  border:none;background:var(--ink);color:white;
+  font-size:15px;font-weight:600;cursor:pointer;
+  font-family:'Geist',sans-serif;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.ob-launch:hover{background:#2d2c29;transform:translateY(-1px);}
+.ob-close{
+  position:absolute;top:16px;right:16px;
+  background:var(--paper2);border:none;border-radius:50%;
+  width:30px;height:30px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--ink3);transition:all .15s;
+}
+.ob-close:hover{background:var(--paper3);}
+
+/* ── FOOTER ── */
+footer{
+  padding:40px 5%;
+  border-top:1px solid var(--paper3);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.foot-logo{font-family:'Instrument Serif',serif;font-size:18px;color:var(--ink);}
+.foot-logo em{color:var(--green);font-style:normal;}
+.foot-copy{font-size:12.5px;color:var(--ink3);}
+.foot-links{display:flex;gap:20px;}
+.foot-links a{font-size:12.5px;color:var(--ink3);text-decoration:none;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .mockup-content{grid-template-columns:1fr;}
+  .mock-sidebar{display:none;}
+  .mock-stats{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Client<em>Hub</em></div>
+  <div class="nav-links">
+    <a href="#features">Funciones</a>
+    <a href="#how">Cómo funciona</a>
+    <a href="#pricing">Precios</a>
+  </div>
+  <button class="nav-cta" onclick="openOnboarding()">Empezar gratis →</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-badge"><span class="hero-badge-dot"></span>Nuevo · Portal de clientes incluido</div>
+  <h1 class="hero-h">El workspace para<br><em>freelancers serios.</em></h1>
+  <p class="hero-sub">Gestiona proyectos, clientes y facturas en un solo lugar. Dale a tus clientes un portal profesional que impresiona.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="openOnboarding()">Crear cuenta gratis <span>→</span></button>
+    <a href="#how" class="btn-secondary">Ver cómo funciona</a>
+  </div>
+  <div class="hero-mockup">
+    <div class="mockup-bar">
+      <div class="mock-dot mock-d1"></div>
+      <div class="mock-dot mock-d2"></div>
+      <div class="mock-dot mock-d3"></div>
+      <div class="mockup-bar-url">app.clienthub.app/dashboard</div>
+    </div>
+    <div class="mockup-content">
+      <div class="mock-sidebar">
+        <div class="mock-logo-sm">Client<em>Hub</em></div>
+        <div class="mock-nav-item active">⊞ Resumen</div>
+        <div class="mock-nav-item">🚀 Proyectos</div>
+        <div class="mock-nav-item">👥 Clientes</div>
+        <div class="mock-nav-item">💳 Facturación</div>
+        <div class="mock-nav-item">✅ Tareas</div>
+        <div class="mock-nav-item">💬 Mensajes</div>
+      </div>
+      <div class="mock-main">
+        <div class="mock-title">Buenos días, Carlos ☀</div>
+        <div class="mock-stats">
+          <div class="mock-stat"><div class="mock-stat-n">INGRESOS MES</div><div class="mock-stat-v">$9.8k</div></div>
+          <div class="mock-stat"><div class="mock-stat-n">PROYECTOS</div><div class="mock-stat-v">4</div></div>
+          <div class="mock-stat"><div class="mock-stat-n">POR COBRAR</div><div class="mock-stat-v">$5k</div></div>
+          <div class="mock-stat"><div class="mock-stat-n">TAREAS</div><div class="mock-stat-v">7</div></div>
+        </div>
+        <div class="mock-projects">
+          <div class="mock-proj"><div class="mock-proj-dot" style="background:#7c3aed"></div><div class="mock-proj-info"><div class="mock-proj-name">Rediseño Web Corporativo</div><div class="mock-proj-sub">Estudio Forma · Diseño UI</div></div><div class="mock-bar"><div class="mock-fill" style="width:65%;background:#7c3aed"></div></div></div>
+          <div class="mock-proj"><div class="mock-proj-dot" style="background:#0ea5e9"></div><div class="mock-proj-info"><div class="mock-proj-name">SaaS Platform MVP</div><div class="mock-proj-sub">TechStart Inc. · Desarrollo</div></div><div class="mock-bar"><div class="mock-fill" style="width:42%;background:#0ea5e9"></div></div></div>
+          <div class="mock-proj"><div class="mock-proj-dot" style="background:#ec4899"></div><div class="mock-proj-info"><div class="mock-proj-name">Branding Bloom Studio</div><div class="mock-proj-sub">Bloom Studio · Conceptos</div></div><div class="mock-bar"><div class="mock-fill" style="width:30%;background:#ec4899"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos">
+  <div class="logos-label">Freelancers de estas industrias usan ClientHub</div>
+  <div class="logos-row">
+    <div class="logo-item">Diseño UI/UX</div>
+    <div class="logo-item">Desarrollo Web</div>
+    <div class="logo-item">Branding</div>
+    <div class="logo-item">Marketing Digital</div>
+    <div class="logo-item">Consultoría</div>
+    <div class="logo-item">Fotografía</div>
+    <div class="logo-item">Copywriting</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-inner">
+    <div class="section-label">El problema</div>
+    <h2 class="problem-h">Manejar un negocio freelance<br>no debería ser <em>un caos.</em></h2>
+    <p class="problem-sub">¿Cuántas apps usas hoy para manejar tus proyectos, clientes y pagos? ClientHub lo pone todo en un solo lugar.</p>
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <div class="pain-icon">😩</div>
+        <div class="pain-title">Clientes preguntando todo el tiempo</div>
+        <div class="pain-text">"¿Cómo va el proyecto?" "¿Para cuándo estará listo?" Emails y WhatsApps infinitos que te sacan del trabajo.</div>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-icon">📊</div>
+        <div class="pain-title">Facturas en Excel, proyectos en Notion</div>
+        <div class="pain-text">Tareas en Trello, mensajes en email, pagos en otra app. Demasiadas herramientas, demasiado tiempo perdido.</div>
+      </div>
+      <div class="pain-card reveal">
+        <div class="pain-icon">💸</div>
+        <div class="pain-title">Pagos que se retrasan y se olvidan</div>
+        <div class="pain-text">Sin un sistema claro, los clientes pagan tarde o no pagan. Y tú no tienes tiempo de hacer seguimiento de cada factura.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="features-inner">
+    <div class="section-label">Funciones</div>
+    <h2 class="features-h reveal">Todo lo que necesitas,<br>nada que no necesitas.</h2>
+    <p class="features-sub reveal">Diseñado específicamente para freelancers. Sin funciones de corporativo que nunca vas a usar.</p>
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon" style="background:#f0fdf4">🚀</div>
+        <div class="feat-title">Gestión de proyectos</div>
+        <div class="feat-text">Organiza cada proyecto con fases, progreso y entregables. Todo visible en un solo dashboard.</div>
+        <div class="feat-list">
+          <div class="feat-item">Fases y porcentaje de avance</div>
+          <div class="feat-item">Entregables con aprobación del cliente</div>
+          <div class="feat-item">Tareas con prioridad y fecha límite</div>
+        </div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon" style="background:#eff6ff">👁</div>
+        <div class="feat-title">Portal de clientes</div>
+        <div class="feat-text">Cada cliente tiene su propio portal donde ve el avance de sus proyectos en tiempo real. Sin emails innecesarios.</div>
+        <div class="feat-list">
+          <div class="feat-item">Login con link único por cliente</div>
+          <div class="feat-item">Vista de proyectos y entregables</div>
+          <div class="feat-item">Bilingüe — Español e Inglés</div>
+        </div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon" style="background:#f5f3ff">💳</div>
+        <div class="feat-title">Facturación integrada</div>
+        <div class="feat-text">Crea y envía facturas profesionales en PDF con un clic. Lleva el control de lo que te deben en todo momento.</div>
+        <div class="feat-list">
+          <div class="feat-item">Facturas PDF profesionales</div>
+          <div class="feat-item">Estado pagado / pendiente / vencido</div>
+          <div class="feat-item">Resumen financiero mensual</div>
+        </div>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon" style="background:#fdf2f8">💬</div>
+        <div class="feat-title">Mensajes por proyecto</div>
+        <div class="feat-text">Chat directo con cada cliente dentro de la plataforma. Toda la comunicación en un solo lugar, no en tu email personal.</div>
+        <div class="feat-list">
+          <div class="feat-item">Chat por cliente integrado</div>
+          <div class="feat-item">Historial completo de conversaciones</div>
+          <div class="feat-item">Acceso desde el portal del cliente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how">
+  <div class="how-inner">
+    <div class="section-label" style="text-align:center">Cómo funciona</div>
+    <h2 class="how-h reveal">En 3 pasos, listo.</h2>
+    <p class="how-sub reveal">Sin configuraciones complicadas. Sin migraciones de datos. Empiezas a trabajar en minutos.</p>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-title">Crea tu cuenta</div>
+        <div class="step-text">Registra tu perfil de freelancer en 2 minutos. Sin tarjeta de crédito requerida para empezar.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <div class="step-title">Agrega tus clientes</div>
+        <div class="step-text">Invita a tus clientes con un email. Ellos reciben acceso a su portal personal automáticamente.</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <div class="step-title">Gestiona todo desde aquí</div>
+        <div class="step-text">Proyectos, tareas, facturas y mensajes en un solo workspace. Tu negocio, organizado.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing-inner">
+    <div class="section-label">Precios</div>
+    <h2 class="pricing-h reveal">Precio justo para freelancers.</h2>
+    <p class="pricing-sub reveal">Sin contratos. Sin sorpresas. Cancela cuando quieras.</p>
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <div class="price-plan">Starter</div>
+        <div class="price-amount"><span class="price-sign">$</span>0</div>
+        <div class="price-period">por mes · para siempre</div>
+        <div class="price-divider"></div>
+        <div class="price-feature"><span class="price-check">✓</span> Hasta 2 clientes activos</div>
+        <div class="price-feature"><span class="price-check">✓</span> Hasta 3 proyectos</div>
+        <div class="price-feature"><span class="price-check">✓</span> Portal de cliente básico</div>
+        <div class="price-feature"><span class="price-check">✓</span> Facturación manual</div>
+        <div class="price-feature"><span class="price-x">✗</span> <span style="color:var(--ink3)">PDF de facturas</span></div>
+        <div class="price-feature"><span class="price-x">✗</span> <span style="color:var(--ink3)">Reportes financieros</span></div>
+        <button class="price-cta" onclick="openOnboarding()">Empezar gratis</button>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-badge">⚡ Más popular</div>
+        <div class="price-plan">Pro</div>
+        <div class="price-amount"><span class="price-sign">$</span>19</div>
+        <div class="price-period">por mes · facturado mensual</div>
+        <div class="price-divider"></div>
+        <div class="price-feature"><span class="price-check">✓</span> Clientes ilimitados</div>
+        <div class="price-feature"><span class="price-check">✓</span> Proyectos ilimitados</div>
+        <div class="price-feature"><span class="price-check">✓</span> Portal de cliente premium</div>
+        <div class="price-feature"><span class="price-check">✓</span> Facturas PDF profesionales</div>
+        <div class="price-feature"><span class="price-check">✓</span> Reportes financieros</div>
+        <div class="price-feature"><span class="price-check">✓</span> Chat con clientes</div>
+        <a class="price-cta" href="https://buy.stripe.com/test_cNibJ34V7eos7Ll7NMgYU00" target="_blank" style="text-decoration:none;display:block;text-align:center;">Suscribirse a Pro →</a>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-plan">Agency</div>
+        <div class="price-amount"><span class="price-sign">$</span>49</div>
+        <div class="price-period">por mes · hasta 5 usuarios</div>
+        <div class="price-divider"></div>
+        <div class="price-feature"><span class="price-check">✓</span> Todo de Pro</div>
+        <div class="price-feature"><span class="price-check">✓</span> 5 freelancers en el equipo</div>
+        <div class="price-feature"><span class="price-check">✓</span> Panel de administrador</div>
+        <div class="price-feature"><span class="price-check">✓</span> White-label del portal</div>
+        <div class="price-feature"><span class="price-check">✓</span> Soporte prioritario</div>
+        <div class="price-feature"><span class="price-check">✓</span> API de integración</div>
+        <a class="price-cta" href="https://buy.stripe.com/test_dRm8wR5Zb5RWaXx2tsgYU01" target="_blank" style="text-decoration:none;display:block;text-align:center;">Suscribirse a Agency →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="test-inner">
+    <h2 class="test-h reveal">Freelancers que recuperaron su tiempo.</h2>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"Antes mis clientes me escribían por WhatsApp todos los días preguntando cómo iba su proyecto. Desde que uso ClientHub, cero mensajes de ese tipo. Ellos entran al portal y ya ven todo."</div>
+        <div class="test-author">
+          <div class="test-av" style="background:#ddd6fe">MP</div>
+          <div><div class="test-name">María Paula V.</div><div class="test-title">Diseñadora UI/UX · Bogotá</div></div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"Cobro $2,000 más por proyecto desde que tengo el portal de cliente. No porque subí precios, sino porque mis clientes ven que soy mucho más profesional que los otros freelancers que contratan."</div>
+        <div class="test-author">
+          <div class="test-av" style="background:#bbf7d0">RA</div>
+          <div><div class="test-name">Roberto A.</div><div class="test-title">Desarrollador Full Stack · CDMX</div></div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-quote">"El módulo de facturación me ahorró horas al mes. Antes hacía facturas en Word, las mandaba por email y perseguía los pagos. Ahora todo es automático y mis clientes pagan más rápido."</div>
+        <div class="test-author">
+          <div class="test-av" style="background:#fde68a">SC</div>
+          <div><div class="test-name">Sofía C.</div><div class="test-title">Consultora de Marketing · Buenos Aires</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2 class="cta-h reveal">Tu negocio freelance,<br><em>finalmente organizado.</em></h2>
+  <p class="cta-sub reveal">Únete a cientos de freelancers que ya gestionan sus clientes con ClientHub. Empieza gratis hoy.</p>
+  <button class="btn-primary" style="font-size:16px;padding:17px 40px" onclick="openOnboarding()">Crear cuenta gratis →</button>
+  <div class="cta-fine reveal">Sin tarjeta de crédito · Cancela cuando quieras · Plan gratis disponible</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">Client<em>Hub</em></div>
+  <div class="foot-copy">© 2026 ClientHub. Hecho para freelancers.</div>
+  <div class="foot-links">
+    <a href="#">Privacidad</a>
+    <a href="#">Términos</a>
+    <a href="#">Soporte</a>
+  </div>
+</footer>
+
+<!-- ONBOARDING MODAL -->
+<div class="ob-overlay" id="obOverlay">
+  <div class="ob-modal" id="obModal" style="position:relative">
+    <button class="ob-close" onclick="closeOnboarding()">✕</button>
+    <div class="ob-progress"><div class="ob-progress-fill" id="obProgress"></div></div>
+    <div class="ob-body" id="obBody"></div>
+  </div>
+</div>
+
+<script>
+// ── SCROLL REVEAL ──────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── ONBOARDING ────────────────────────────────────────────
+let currentStep = 0;
+let formData = {};
+
+const steps = [
+  {
+    label: "Paso 1 de 4",
+    title: "¡Bienvenido a ClientHub!",
+    sub: "Cuéntanos un poco sobre ti para personalizar tu experiencia.",
+    pct: 25,
+    render: () => `
+      <div class="ob-row">
+        <div class="ob-field">
+          <label class="ob-lbl">Nombre</label>
+          <input class="ob-inp" id="f_name" placeholder="Carlos" value="${formData.name||''}">
+        </div>
+        <div class="ob-field">
+          <label class="ob-lbl">Apellido</label>
+          <input class="ob-inp" id="f_last" placeholder="Rivera" value="${formData.last||''}">
+        </div>
+      </div>
+      <div class="ob-field">
+        <label class="ob-lbl">Email profesional</label>
+        <input class="ob-inp" id="f_email" type="email" placeholder="carlos@tudominio.com" value="${formData.email||''}">
+      </div>
+    `,
+    save: () => {
+      formData.name  = document.getElementById('f_name')?.value;
+      formData.last  = document.getElementById('f_last')?.value;
+      formData.email = document.getElementById('f_email')?.value;
+    }
+  },
+  {
+    label: "Paso 2 de 4",
+    title: "¿Qué tipo de freelancer eres?",
+    sub: "Personalizamos tu workspace según tu tipo de trabajo.",
+    pct: 50,
+    render: () => `
+      <div class="ob-type-grid">
+        ${[
+          {v:'design', ic:'🎨', l:'Diseño'},
+          {v:'dev',    ic:'💻', l:'Desarrollo'},
+          {v:'marketing', ic:'📣', l:'Marketing'},
+          {v:'consult', ic:'💡', l:'Consultoría'},
+          {v:'photo',  ic:'📷', l:'Fotografía'},
+          {v:'copy',   ic:'✍️', l:'Copywriting'},
+        ].map(t => `
+          <div class="ob-type ${formData.type===t.v?'sel':''}" onclick="selectType('${t.v}')">
+            <div class="ob-type-ic">${t.ic}</div>
+            <div class="ob-type-lbl">${t.l}</div>
+          </div>
+        `).join('')}
+      </div>
+    `,
+    save: () => {}
+  },
+  {
+    label: "Paso 3 de 4",
+    title: "Tu negocio en números",
+    sub: "Esto nos ayuda a configurar tus metas y reportes financieros.",
+    pct: 75,
+    render: () => `
+      <div class="ob-field">
+        <label class="ob-lbl">¿Cuántos clientes activos tienes ahora?</label>
+        <select class="ob-inp" id="f_clients">
+          <option value="">Seleccionar...</option>
+          <option ${formData.clients==='1-3'?'selected':''} value="1-3">1 a 3 clientes</option>
+          <option ${formData.clients==='4-8'?'selected':''} value="4-8">4 a 8 clientes</option>
+          <option ${formData.clients==='9+'?'selected':''} value="9+">9 o más</option>
+        </select>
+      </div>
+      <div class="ob-field">
+        <label class="ob-lbl">Meta de ingresos mensuales ($)</label>
+        <input class="ob-inp" id="f_goal" type="number" placeholder="5000" value="${formData.goal||''}">
+      </div>
+      <div class="ob-field">
+        <label class="ob-lbl">¿Cómo cobras actualmente?</label>
+        <select class="ob-inp" id="f_billing">
+          <option value="">Seleccionar...</option>
+          <option ${formData.billing==='project'?'selected':''} value="project">Por proyecto</option>
+          <option ${formData.billing==='hourly'?'selected':''} value="hourly">Por hora</option>
+          <option ${formData.billing==='retainer'?'selected':''} value="retainer">Retainer mensual</option>
+          <option ${formData.billing==='mixed'?'selected':''} value="mixed">Mixto</option>
+        </select>
+      </div>
+    `,
+    save: () => {
+      formData.clients = document.getElementById('f_clients')?.value;
+      formData.goal    = document.getElementById('f_goal')?.value;
+      formData.billing = document.getElementById('f_billing')?.value;
+    }
+  },
+  {
+    label: "Paso 4 de 4",
+    title: "Elige tu plan",
+    sub: "Empieza gratis. Actualiza cuando estés listo.",
+    pct: 100,
+    render: () => `
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${[
+          {v:'free',  n:'Starter',  p:'Gratis',  d:'Hasta 2 clientes y 3 proyectos'},
+          {v:'pro',   n:'Pro',      p:'$19/mes', d:'Todo ilimitado + PDF de facturas', rec:true},
+          {v:'agency',n:'Agency',   p:'$49/mes', d:'Equipo de hasta 5 freelancers'},
+        ].map(p => `
+          <div onclick="selectPlan('${p.v}')"
+            style="border:1.5px solid ${formData.plan===p.v?'var(--ink)':'var(--paper3)'};border-radius:12px;padding:14px 16px;cursor:pointer;background:${formData.plan===p.v?'var(--ink)':'transparent'};transition:all .15s;display:flex;align-items:center;gap:12px">
+            <div style="width:18px;height:18px;border-radius:50%;border:2px solid ${formData.plan===p.v?'white':'var(--paper3)'};background:${formData.plan===p.v?'white':'transparent'};display:flex;align-items:center;justify-content:center">
+              ${formData.plan===p.v ? '<div style="width:8px;height:8px;border-radius:50%;background:var(--ink)"></div>' : ''}
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:14px;font-weight:700;color:${formData.plan===p.v?'white':'var(--ink)'}">${p.n}</span>
+                ${p.rec ? `<span style="font-size:10px;background:${formData.plan===p.v?'rgba(134,239,172,.2)':'var(--green-l)'};color:${formData.plan===p.v?'#86efac':'var(--green)'};padding:2px 7px;border-radius:10px;font-weight:700">Recomendado</span>` : ''}
+              </div>
+              <div style="font-size:12.5px;color:${formData.plan===p.v?'rgba(255,255,255,.55)':'var(--ink3)'};margin-top:2px">${p.d}</div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:${formData.plan===p.v?'white':'var(--ink)'}">${p.p}</div>
+          </div>
+        `).join('')}
+      </div>
+    `,
+    save: () => {}
+  }
+];
+
+function renderStep() {
+  const s = steps[currentStep];
+  document.getElementById('obProgress').style.width = s.pct + '%';
+  document.getElementById('obBody').innerHTML = `
+    <div class="ob-step-label">${s.label}</div>
+    <div class="ob-title">${s.title}</div>
+    <div class="ob-sub">${s.sub}</div>
+    ${s.render()}
+    <div class="ob-actions">
+      ${currentStep > 0 ? `<button class="ob-back" onclick="prevStep()">← Atrás</button>` : `<button class="ob-back" onclick="closeOnboarding()">Cancelar</button>`}
+      <button class="ob-next" onclick="nextStep()">${currentStep === steps.length - 1 ? 'Crear mi cuenta →' : 'Continuar →'}</button>
+    </div>
+  `;
+}
+
+function selectType(v) {
+  formData.type = v;
+  renderStep();
+}
+function selectPlan(v) {
+  formData.plan = v;
+  renderStep();
+}
+
+function nextStep() {
+  steps[currentStep].save();
+  if (currentStep < steps.length - 1) {
+    currentStep++;
+    renderStep();
+  } else {
+    // SUCCESS
+    document.getElementById('obBody').innerHTML = `
+      <div class="ob-success">
+        <div class="ob-success-icon">🎉</div>
+        <div class="ob-success-h">¡Tu cuenta está lista,<br>${formData.name || 'freelancer'}!</div>
+        <div class="ob-success-p">Hemos configurado tu workspace con el plan <strong>${formData.plan || 'Starter'}</strong>.<br>Tu primer cliente ya puede acceder a su portal.</div>
+        <button class="ob-launch" onclick="closeOnboarding()">
+          <span>🚀</span> Ir a mi dashboard
+        </button>
+      </div>
+    `;
+    document.getElementById('obProgress').style.width = '100%';
+    document.getElementById('obProgress').style.background = 'var(--green)';
+  }
+}
+
+function prevStep() {
+  if (currentStep > 0) { currentStep--; renderStep(); }
+}
+
+function openOnboarding() {
+  currentStep = 0;
+  formData = { plan: 'pro' };
+  renderStep();
+  document.getElementById('obOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOnboarding() {
+  document.getElementById('obOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('obOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('obOverlay')) closeOnboarding();
+});
+</script>
+</body>
+</html>

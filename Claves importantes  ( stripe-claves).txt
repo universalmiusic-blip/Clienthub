@@ -1,0 +1,10 @@
+Clave publicable	
+
+pk_test_51T8uA9R4E4vBPVWT4t5NUUDcT8JgcB1XdApidt4RphGaHAJQDWJw9JSAfk5S3RFKXUN3fSNEIa8OqF7py5NutlNr00xqsTUVnB
+
+
+
+Clave secreta
+
+	
+sk_test_51T8uA9R4E4vBPVWTpbV9cJUttuXECLJ4Vhhc7ISGOj8jVqCrqkLZUsicbcT0MX1wNa8ThR7gug4UGbmJxYb5z9vK00ndAC4zHj
