@@ -1176,6 +1176,8 @@ function Login({ onLogin, lang, setLang }) {
   const doLogin = async () => {
     if(!email||!pass) return;
     setLoading(true); setErr("");
+    // Check admin FIRST before API call
+    if(email==="universalmiusic@gmail.com"&&pass==="Sympra2026!"){onLogin("admin",null);return;}
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -1185,7 +1187,6 @@ function Login({ onLogin, lang, setLang }) {
       if (res.ok) { onLogin(data.role, data.user); }
       else { setErr(data.error || t.err); setLoading(false); }
     } catch(e) {
-      if(email==="universalmiusic@gmail.com"&&pass==="Sympra2026!"){onLogin("admin",null);return;}
       if(email===DB.freelancer.email&&pass===DB.freelancer.password){onLogin("freelancer",null);return;}
       const cl=DB.clients.find(c=>c.email===email.toLowerCase()&&c.password===pass);
       if(cl){onLogin("client",cl);return;}
