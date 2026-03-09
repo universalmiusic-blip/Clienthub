@@ -1129,39 +1129,78 @@ function ClientPortal({ client, db, dispatch, onLogout, lang, setLang }) {
 //  LOGIN
 // ════════════════════════════════════════════════════════════
 function Login({ onLogin, lang, setLang }) {
-  const [email, setEmail] = useState(""); const [pass, setPass] = useState(""); const [err, setErr] = useState(""); const [loading, setLoading] = useState(false);
-  const TL = { es:{welcome:"Bienvenido a tu",portal:"Portal",sub:"El hub de trabajo entre freelancers y sus clientes.",emailL:"Correo electrónico",passL:"Contraseña",enter:"Ingresar",loading:"Verificando...",err:"Credenciales incorrectas",demo:"Cuentas demo",use:"Usar →"},en:{welcome:"Welcome to your",portal:"Portal",sub:"The workspace hub for freelancers and their clients.",emailL:"Email address",passL:"Password",enter:"Sign in",loading:"Verifying...",err:"Incorrect credentials",demo:"Demo accounts",use:"Use →"}};
+  const [mode, setMode]         = useState("login"); // "login" | "register"
+  const [email, setEmail]       = useState("");
+  const [pass, setPass]         = useState("");
+  const [name, setName]         = useState("");
+  const [err, setErr]           = useState("");
+  const [loading, setLoading]   = useState(false);
+
+  const TL = {
+    es:{ welcome:"Bienvenido a tu", portal:"Portal", sub:"El hub de trabajo entre freelancers y sus clientes.", emailL:"Correo electrónico", passL:"Contraseña", nameL:"Tu nombre completo", enter:"Ingresar", register:"Crear cuenta", loading:"Verificando...", registering:"Creando cuenta...", err:"Credenciales incorrectas", errReg:"Error al crear la cuenta", demo:"Cuentas demo", use:"Usar →", noAcc:"¿No tienes cuenta?", hasAcc:"¿Ya tienes cuenta?", signUp:"Regístrate gratis", signIn:"Inicia sesión" },
+    en:{ welcome:"Welcome to your", portal:"Portal", sub:"The workspace hub for freelancers and their clients.", emailL:"Email address", passL:"Password", nameL:"Your full name", enter:"Sign in", register:"Create account", loading:"Verifying...", registering:"Creating account...", err:"Incorrect credentials", errReg:"Error creating account", demo:"Demo accounts", use:"Use →", noAcc:"Don't have an account?", hasAcc:"Already have an account?", signUp:"Sign up free", signIn:"Sign in" }
+  };
   const t = TL[lang];
   const demos = [{label:"Freelancer",email:"carlos@sympra.app",pass:"admin"},{label:"Ana (cliente)",email:"ana@empresa.com",pass:"1234"},{label:"John (cliente)",email:"john@company.com",pass:"5678"},{label:"Lucía (cliente)",email:"lucia@bloom.co",pass:"9999"}];
+
   const doLogin = async () => {
     if(!email||!pass) return;
     setLoading(true); setErr("");
     try {
       const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.toLowerCase(), password: pass })
       });
       const data = await res.json();
-      if (res.ok) {
-        onLogin(data.role, data.user);
-      } else {
-        setErr(data.error || t.err);
-        setLoading(false);
-      }
+      if (res.ok) { onLogin(data.role, data.user); }
+      else { setErr(data.error || t.err); setLoading(false); }
     } catch(e) {
-      // Fallback to demo data if API fails
       if(email===DB.freelancer.email&&pass===DB.freelancer.password){onLogin("freelancer",null);return;}
       const cl=DB.clients.find(c=>c.email===email.toLowerCase()&&c.password===pass);
       if(cl){onLogin("client",cl);return;}
-      setErr(t.err);
-      setLoading(false);
+      setErr(t.err); setLoading(false);
     }
   };
+
+  const doRegister = async () => {
+    if(!name||!email||!pass) return;
+    setLoading(true); setErr("");
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email: email.toLowerCase(), password: pass })
+      });
+      const data = await res.json();
+      if (res.ok) { onLogin(data.role, data.user); }
+      else { setErr(data.error || t.errReg); setLoading(false); }
+    } catch(e) {
+      setErr(t.errReg); setLoading(false);
+    }
+  };
+
   return (
     <div className="login-wrap">
       <div className="login-art"><div className="art-grid"/><div className="art-orb o1"/><div className="art-orb o2"/><div className="art-inner"><div className="art-logo">Sym<em>pra</em></div><div className="art-sub">{t.sub}</div><div className="art-cards">{[{ic:"🎨",col:"#7c3aed",l:"Rediseño Web",s:lang==="es"?"65% completado":"65% done"},{ic:"⚡",col:"#0ea5e9",l:"SaaS MVP",s:lang==="es"?"En desarrollo":"In progress"},{ic:"✅",col:"#10b981",l:"Branding",s:lang==="es"?"Entregado":"Delivered"}].map((c,i)=>(<div className="acard" key={i}><div className="acard-ic" style={{background:`${c.col}22`}}>{c.ic}</div><div className="acard-txt"><strong>{c.l}</strong>{c.s}</div></div>))}</div></div></div>
-      <div className="login-side"><div className="login-inner"><div className="lang-row">{["es","en"].map(l=><button key={l} className={`lbtn${lang===l?" on":""}`} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>)}</div><div className="login-eyebrow">{t.welcome}</div><div className="login-h">{t.portal}</div><div className="login-desc">{t.sub}</div><div className="fgroup"><label className="flbl">{t.emailL}</label><input className="finp" type="email" placeholder="tu@email.com" value={email} onChange={e=>{setEmail(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&doLogin()}/></div><div className="fgroup"><label className="flbl">{t.passL}</label><input className="finp" type="password" placeholder="••••••••" value={pass} onChange={e=>{setPass(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&doLogin()}/></div><button className="btn btn-dark" style={{width:"100%",justifyContent:"center",padding:"13px",fontSize:15}} onClick={doLogin} disabled={loading||!email||!pass}>{loading?t.loading:t.enter}</button>{err&&<div className="lerror">{err}</div>}<div className="demo-box"><div className="demo-ttl">{t.demo}</div>{demos.map(d=>(<div className="demo-row" key={d.email} onClick={()=>{setEmail(d.email);setPass(d.pass);setErr("");}}><span className="demo-em">{d.label}·{d.email}/{d.pass}</span><span className="demo-use">{t.use}</span></div>))}</div></div></div>
+      <div className="login-side"><div className="login-inner">
+        <div className="lang-row">{["es","en"].map(l=><button key={l} className={`lbtn${lang===l?" on":""}`} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>)}</div>
+        <div className="login-eyebrow">{mode==="login"?t.welcome:"Sympra"}</div>
+        <div className="login-h">{mode==="login"?t.portal:t.register}</div>
+        <div className="login-desc">{t.sub}</div>
+        {mode==="register" && <div className="fgroup"><label className="flbl">{t.nameL}</label><input className="finp" type="text" placeholder="Anthony Paulino" value={name} onChange={e=>{setName(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&doRegister()}/></div>}
+        <div className="fgroup"><label className="flbl">{t.emailL}</label><input className="finp" type="email" placeholder="tu@email.com" value={email} onChange={e=>{setEmail(e.target.value);setErr("");}} onKeyDown={e=>e.key===(mode==="login"?"Enter":"")&&doLogin()}/></div>
+        <div className="fgroup"><label className="flbl">{t.passL}</label><input className="finp" type="password" placeholder="••••••••" value={pass} onChange={e=>{setPass(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&(mode==="login"?doLogin():doRegister())}/></div>
+        <button className="btn btn-dark" style={{width:"100%",justifyContent:"center",padding:"13px",fontSize:15}} onClick={mode==="login"?doLogin:doRegister} disabled={loading||!email||!pass||(mode==="register"&&!name)}>
+          {loading?(mode==="login"?t.loading:t.registering):(mode==="login"?t.enter:t.register)}
+        </button>
+        {err&&<div className="lerror">{err}</div>}
+        <div style={{textAlign:"center",marginTop:16,fontSize:13,color:"var(--ink3)"}}>
+          {mode==="login"?t.noAcc:t.hasAcc}{" "}
+          <span style={{color:"var(--accent)",fontWeight:700,cursor:"pointer"}} onClick={()=>{setMode(mode==="login"?"register":"login");setErr("");}}>
+            {mode==="login"?t.signUp:t.signIn}
+          </span>
+        </div>
+        {mode==="login" && <div className="demo-box"><div className="demo-ttl">{t.demo}</div>{demos.map(d=>(<div className="demo-row" key={d.email} onClick={()=>{setEmail(d.email);setPass(d.pass);setErr("");}}><span className="demo-em">{d.label}·{d.email}/{d.pass}</span><span className="demo-use">{t.use}</span></div>))}</div>}
+      </div></div>
     </div>
   );
 }
