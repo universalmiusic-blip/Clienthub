@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sympra — El hub de trabajo para freelancers</title>
+<meta name="description" content="Gestiona clientes, proyectos y facturas en un solo lugar. La herramienta que los freelancers profesionales usan para crecer."/>
+<link rel="icon" href="https://sympra.app/icon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#080810;
+  --bg2:#0e0e1a;
+  --bg3:#13131f;
+  --border:#1e1e30;
+  --accent:#7c3aed;
+  --accent2:#a855f7;
+  --accent3:#06b6d4;
+  --green:#10b981;
+  --ink:#f0f0fa;
+  --ink2:#a0a0c0;
+  --ink3:#60607a;
+  --font-display:'Bricolage Grotesque',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(8,8,16,.8);border-bottom:1px solid rgba(255,255,255,.05);}
+.nav-logo{font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;text-decoration:none;}
+.nav-logo em{color:var(--accent2);font-style:normal;}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{color:var(--ink2);text-decoration:none;font-size:14px;font-weight:500;transition:.2s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{background:var(--accent);color:#fff!important;padding:9px 20px;border-radius:100px;font-weight:600!important;transition:.2s!important;}
+.nav-cta:hover{background:var(--accent2)!important;transform:translateY(-1px);}
+.nav-mobile-btn{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(124,58,237,.25) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 60%,rgba(6,182,212,.1) 0%,transparent 60%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%);}
+.hero-content{position:relative;max-width:780px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.3);border-radius:100px;padding:6px 16px;font-size:13px;color:var(--accent2);font-weight:600;margin-bottom:32px;}
+.hero-badge-dot{width:6px;height:6px;background:var(--accent2);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hero h1{font-family:var(--font-display);font-size:clamp(42px,7vw,80px);font-weight:800;line-height:1.08;letter-spacing:-2px;margin-bottom:24px;}
+.hero h1 span{background:linear-gradient(135deg,var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(16px,2.5vw,20px);color:var(--ink2);line-height:1.6;max-width:560px;margin:0 auto 44px;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--accent);color:#fff;padding:15px 32px;border-radius:100px;font-size:16px;font-weight:700;text-decoration:none;transition:.25s;display:inline-flex;align-items:center;gap:8px;font-family:var(--font-body);}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,58,237,.4);}
+.btn-secondary{background:rgba(255,255,255,.06);color:#fff;padding:15px 32px;border-radius:100px;font-size:16px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.1);transition:.25s;display:inline-flex;align-items:center;gap:8px;}
+.btn-secondary:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);}
+.hero-note{margin-top:20px;font-size:13px;color:var(--ink3);}
+
+/* STATS */
+.stats-bar{padding:32px 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);}
+.stats-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-around;gap:24px;flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-num{font-family:var(--font-display);font-size:36px;font-weight:800;color:#fff;}
+.stat-num span{color:var(--accent2);}
+.stat-lbl{font-size:13px;color:var(--ink3);margin-top:4px;}
+
+/* APP PREVIEW */
+.preview-section{padding:100px 24px;text-align:center;position:relative;}
+.section-label{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);margin-bottom:16px;}
+.section-title{font-family:var(--font-display);font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1px;margin-bottom:16px;}
+.section-sub{font-size:16px;color:var(--ink2);max-width:500px;margin:0 auto 60px;line-height:1.6;}
+.app-frame{max-width:900px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05);background:var(--bg3);}
+.app-bar{background:#0a0a14;padding:14px 20px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.app-dot{width:12px;height:12px;border-radius:50%;}
+.app-url{flex:1;background:rgba(255,255,255,.05);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--ink3);text-align:center;margin:0 12px;}
+.app-inner{display:grid;grid-template-columns:200px 1fr;min-height:500px;}
+.app-side{background:#09090f;border-right:1px solid var(--border);padding:20px 0;}
+.app-side-logo{padding:0 20px 20px;font-family:var(--font-display);font-size:18px;font-weight:800;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.app-side-logo em{color:var(--accent2);font-style:normal;}
+.app-nav-item{padding:9px 20px;font-size:13px;color:var(--ink3);display:flex;align-items:center;gap:10px;cursor:default;}
+.app-nav-item.active{background:rgba(124,58,237,.15);color:#fff;border-right:2px solid var(--accent2);}
+.app-content{padding:24px;}
+.app-greeting{font-size:20px;font-weight:700;margin-bottom:4px;}
+.app-date{font-size:12px;color:var(--ink3);margin-bottom:24px;}
+.app-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
+.app-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.app-card-lbl{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.app-card-val{font-size:24px;font-weight:800;font-family:var(--font-display);}
+.app-card-val.green{color:var(--green);}
+.app-card-val.purple{color:var(--accent2);}
+.app-list{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.app-list-hd{padding:12px 16px;font-size:12px;font-weight:700;border-bottom:1px solid var(--border);color:var(--ink2);}
+.app-list-row{padding:11px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.03);font-size:13px;}
+.app-avatar{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.app-row-name{flex:1;font-weight:500;}
+.app-tag{font-size:10px;padding:3px 8px;border-radius:100px;font-weight:600;}
+.tag-paid{background:rgba(16,185,129,.15);color:var(--green);}
+.tag-pending{background:rgba(245,158,11,.15);color:#f59e0b;}
+.tag-active{background:rgba(124,58,237,.15);color:var(--accent2);}
+
+/* FEATURES */
+.features{padding:100px 24px;background:var(--bg2);}
+.features-inner{max-width:1100px;margin:0 auto;}
+.features-header{text-align:center;margin-bottom:64px;}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.feat-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:32px;transition:.3s;position:relative;overflow:hidden;}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:.3s;}
+.feat-card:hover{border-color:rgba(124,58,237,.4);transform:translateY(-4px);}
+.feat-card:hover::before{opacity:1;}
+.feat-icon{font-size:36px;margin-bottom:20px;display:block;}
+.feat-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:10px;}
+.feat-desc{font-size:14px;color:var(--ink2);line-height:1.7;}
+
+/* TESTIMONIALS */
+.testimonials{padding:100px 24px;}
+.testimonials-inner{max-width:1100px;margin:0 auto;}
+.testimonials-header{text-align:center;margin-bottom:64px;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.testi-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;}
+.testi-stars{color:#f59e0b;font-size:14px;margin-bottom:16px;letter-spacing:2px;}
+.testi-text{font-size:15px;line-height:1.7;color:var(--ink2);margin-bottom:24px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;}
+.testi-name{font-weight:700;font-size:14px;}
+.testi-role{font-size:12px;color:var(--ink3);}
+
+/* PRICING */
+.pricing{padding:100px 24px;background:var(--bg2);}
+.pricing-inner{max-width:900px;margin:0 auto;}
+.pricing-header{text-align:center;margin-bottom:64px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.price-card{background:var(--bg3);border:1px solid var(--border);border-radius:24px;padding:32px;text-align:center;position:relative;transition:.3s;}
+.price-card.featured{border-color:var(--accent);background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(168,85,247,.05));}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:100px;letter-spacing:.5px;}
+.price-name{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:8px;}
+.price-amount{font-family:var(--font-display);font-size:48px;font-weight:800;margin:16px 0 4px;}
+.price-amount span{font-size:18px;font-weight:400;color:var(--ink3);}
+.price-period{font-size:13px;color:var(--ink3);margin-bottom:28px;}
+.price-features{list-style:none;margin-bottom:28px;text-align:left;}
+.price-features li{font-size:14px;color:var(--ink2);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.price-features li:last-child{border:none;}
+.price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+.price-btn{display:block;padding:13px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;text-align:center;transition:.25s;}
+.price-btn-outline{border:1px solid var(--border);color:#fff;}
+.price-btn-outline:hover{border-color:var(--accent);background:rgba(124,58,237,.1);}
+.price-btn-solid{background:var(--accent);color:#fff;}
+.price-btn-solid:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,.4);}
+
+/* FAQ */
+.faq{padding:100px 24px;}
+.faq-inner{max-width:700px;margin:0 auto;}
+.faq-header{text-align:center;margin-bottom:64px;}
+.faq-item{border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden;background:var(--bg2);}
+.faq-q{padding:20px 24px;font-weight:600;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.2s;}
+.faq-q:hover{background:rgba(255,255,255,.03);}
+.faq-icon{color:var(--accent2);font-size:20px;transition:.3s;flex-shrink:0;}
+.faq-a{padding:0 24px 20px;font-size:14px;color:var(--ink2);line-height:1.7;display:none;}
+.faq-item.open .faq-a{display:block;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+
+/* CTA */
+.cta-section{padding:100px 24px;text-align:center;position:relative;overflow:hidden;}
+.cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(124,58,237,.2) 0%,transparent 70%);}
+.cta-inner{position:relative;max-width:600px;margin:0 auto;}
+.cta-title{font-family:var(--font-display);font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-1.5px;margin-bottom:20px;}
+.cta-sub{font-size:18px;color:var(--ink2);margin-bottom:40px;line-height:1.6;}
+
+/* FOOTER */
+footer{padding:48px 24px;border-top:1px solid var(--border);background:var(--bg2);}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.footer-logo{font-family:var(--font-display);font-size:20px;font-weight:800;}
+.footer-logo em{color:var(--accent2);font-style:normal;}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-size:13px;color:var(--ink3);text-decoration:none;transition:.2s;}
+.footer-links a:hover{color:#fff;}
+.footer-copy{font-size:12px;color:var(--ink3);}
+
+/* COUNTER ANIMATION */
+.counter{display:inline-block;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .features-grid,.testi-grid,.pricing-grid{grid-template-columns:1fr;}
+  .app-inner{grid-template-columns:1fr;}
+  .app-side{display:none;}
+  .nav-links{display:none;}
+  .nav-mobile-btn{display:block;}
+  .stats-inner{gap:16px;}
+  .stat-num{font-size:28px;}
+}
+@media(max-width:600px){
+  .hero-btns{flex-direction:column;align-items:center;}
+  .btn-primary,.btn-secondary{width:100%;max-width:320px;justify-content:center;}
+  .app-cards{grid-template-columns:1fr;}
+  .footer-inner{flex-direction:column;text-align:center;}
+  .footer-links{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Sym<em>pra</em></a>
+  <div class="nav-links">
+    <a href="#features">Funciones</a>
+    <a href="#pricing">Precios</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://sympra.app" class="nav-cta">Iniciar sesión →</a>
+  </div>
+  <button class="nav-mobile-btn" onclick="document.querySelector('.nav-links').style.display='flex';this.style.display='none'">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Ahora disponible · sympra.app
+    </div>
+    <h1>El hub de trabajo para <span>freelancers profesionales</span></h1>
+    <p class="hero-sub">Gestiona clientes, proyectos, facturas y entregas en un solo lugar. Luce profesional desde el día uno.</p>
+    <div class="hero-btns">
+      <a href="https://sympra.app" class="btn-primary">🚀 Empezar gratis</a>
+      <a href="#features" class="btn-secondary">Ver funciones ↓</a>
+    </div>
+    <p class="hero-note">Sin tarjeta de crédito · Plan gratis disponible</p>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num"><span class="counter" data-target="500">0</span>+</div>
+      <div class="stat-lbl">Freelancers registrados</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">$<span class="counter" data-target="2400000">0</span></div>
+      <div class="stat-lbl">Facturado a través de Sympra</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="counter" data-target="98">0</span>%</div>
+      <div class="stat-lbl">Clientes satisfechos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="counter" data-target="4">0</span> min</div>
+      <div class="stat-lbl">Para crear tu primera factura</div>
+    </div>
+  </div>
+</div>
+
+<!-- APP PREVIEW -->
+<section class="preview-section" id="features">
+  <div class="section-label">La app</div>
+  <h2 class="section-title">Todo lo que necesitas, en un solo lugar</h2>
+  <p class="section-sub">Una interfaz limpia y rápida diseñada para que trabajes, no para que aprendas a usar la herramienta.</p>
+  <div class="app-frame">
+    <div class="app-bar">
+      <div class="app-dot" style="background:#ff5f57"></div>
+      <div class="app-dot" style="background:#ffbd2e"></div>
+      <div class="app-dot" style="background:#28c840"></div>
+      <div class="app-url">🔒 sympra.app</div>
+    </div>
+    <div class="app-inner">
+      <div class="app-side">
+        <div class="app-side-logo">Sym<em>pra</em></div>
+        <div class="app-nav-item active">🏠 Resumen</div>
+        <div class="app-nav-item">🚀 Proyectos</div>
+        <div class="app-nav-item">👥 Clientes</div>
+        <div class="app-nav-item">🧾 Facturación</div>
+        <div class="app-nav-item">✅ Tareas</div>
+        <div class="app-nav-item">💬 Mensajes</div>
+        <div class="app-nav-item">📁 Multimedia</div>
+      </div>
+      <div class="app-content">
+        <div class="app-greeting">Buenos días, Carlos 👋</div>
+        <div class="app-date">lunes, 9 de marzo</div>
+        <div class="app-cards">
+          <div class="app-card">
+            <div class="app-card-lbl">Ingresos este mes</div>
+            <div class="app-card-val green">$8,490</div>
+          </div>
+          <div class="app-card">
+            <div class="app-card-lbl">Por cobrar</div>
+            <div class="app-card-val purple">$3,200</div>
+          </div>
+        </div>
+        <div class="app-list">
+          <div class="app-list-hd">Facturas recientes</div>
+          <div class="app-list-row">
+            <div class="app-avatar" style="background:rgba(124,58,237,.2);color:#a855f7">AM</div>
+            <div class="app-row-name">Ana Martínez · Rediseño Web</div>
+            <span class="app-tag tag-paid">Pagado</span>
+          </div>
+          <div class="app-list-row">
+            <div class="app-avatar" style="background:rgba(6,182,212,.2);color:#06b6d4">JP</div>
+            <div class="app-row-name">John Peterson · SaaS MVP</div>
+            <span class="app-tag tag-pending">Pendiente</span>
+          </div>
+          <div class="app-list-row">
+            <div class="app-avatar" style="background:rgba(16,185,129,.2);color:#10b981">LH</div>
+            <div class="app-row-name">Lucía Herrera · Branding</div>
+            <span class="app-tag tag-active">Activo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="features-inner">
+    <div class="features-header">
+      <div class="section-label">Funciones</div>
+      <h2 class="section-title">Construido para freelancers reales</h2>
+      <p class="section-sub">No es un CRM genérico. Es una herramienta diseñada específicamente para diseñadores, desarrolladores y creativos independientes.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <span class="feat-icon">👥</span>
+        <div class="feat-title">Gestión de clientes</div>
+        <p class="feat-desc">Organiza todos tus clientes con su historial, proyectos activos, facturas y comunicación en un perfil completo.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🚀</span>
+        <div class="feat-title">Seguimiento de proyectos</div>
+        <p class="feat-desc">Fases, entregables, progreso y presupuesto. Tus clientes ven el avance en tiempo real desde su portal.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🧾</span>
+        <div class="feat-title">Facturación profesional</div>
+        <p class="feat-desc">Crea y envía facturas en segundos. Registra pagos, cobra online y mantén tus finanzas bajo control.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">💬</span>
+        <div class="feat-title">Portal del cliente</div>
+        <p class="feat-desc">Tus clientes tienen su propio acceso para ver proyectos, aprobar entregables y comunicarse contigo.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📁</span>
+        <div class="feat-title">Hub multimedia</div>
+        <p class="feat-desc">Sube y organiza archivos, videos, imágenes y documentos de cada proyecto en un solo lugar.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📊</span>
+        <div class="feat-title">Dashboard de ingresos</div>
+        <p class="feat-desc">Visualiza tus ingresos de los últimos 6 meses, meta mensual y proyecciones para tomar mejores decisiones.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="testimonials-header">
+      <div class="section-label">Testimonios</div>
+      <h2 class="section-title">Lo que dicen los freelancers</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Antes usaba hojas de Excel y WhatsApp para todo. Con Sympra mis clientes me ven como una agencia profesional. Subí mis precios un 40%."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(124,58,237,.2);color:#a855f7">MR</div>
+          <div><div class="testi-name">Miguel Rodríguez</div><div class="testi-role">Diseñador UI/UX · Miami</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"El portal del cliente es un game changer. Ya no me preguntan '¿cómo va el proyecto?' porque lo ven ellos mismos. Ahorro 2 horas al día."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(6,182,212,.2);color:#06b6d4">SP</div>
+          <div><div class="testi-name">Sofia Pereira</div><div class="testi-role">Desarrolladora · Buenos Aires</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Facturar me tomaba media hora por cliente. Ahora son 3 minutos. En un mes recuperé el costo de la suscripción solo en tiempo ahorrado."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(16,185,129,.2);color:#10b981">JL</div>
+          <div><div class="testi-name">Jorge Limas</div><div class="testi-role">Productor Audiovisual · NYC</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <div class="pricing-header">
+      <div class="section-label">Precios</div>
+      <h2 class="section-title">Simple y transparente</h2>
+      <p class="section-sub">Empieza gratis. Crece cuando estés listo.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">$0<span>/mes</span></div>
+        <div class="price-period">Para empezar</div>
+        <ul class="price-features">
+          <li>Hasta 3 clientes</li>
+          <li>2 proyectos activos</li>
+          <li>5 facturas al mes</li>
+          <li>Portal del cliente básico</li>
+          <li>Soporte por email</li>
+        </ul>
+        <a href="https://sympra.app" class="price-btn price-btn-outline">Empezar gratis</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">MÁS POPULAR</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount">$19<span>/mes</span></div>
+        <div class="price-period">Para freelancers activos</div>
+        <ul class="price-features">
+          <li>Clientes ilimitados</li>
+          <li>Proyectos ilimitados</li>
+          <li>Facturas ilimitadas</li>
+          <li>Portal del cliente completo</li>
+          <li>Hub multimedia</li>
+          <li>Reportes de ingresos</li>
+          <li>Soporte prioritario</li>
+        </ul>
+        <a href="https://buy.stripe.com/test_cNibJ34V7eos7Ll7NMgYU00" class="price-btn price-btn-solid">Suscribirse a Pro →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Agency</div>
+        <div class="price-amount">$49<span>/mes</span></div>
+        <div class="price-period">Para equipos y agencias</div>
+        <ul class="price-features">
+          <li>Todo lo de Pro</li>
+          <li>Hasta 5 miembros del equipo</li>
+          <li>Panel multi-freelancer</li>
+          <li>Marca personalizada</li>
+          <li>API access</li>
+          <li>Soporte dedicado 24/7</li>
+        </ul>
+        <a href="https://buy.stripe.com/test_dRm8wR5Zb5RWaXx2tsgYU01" class="price-btn price-btn-outline">Suscribirse Agency →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="faq-header">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Preguntas frecuentes</h2>
+    </div>
+    <div class="faq-item open">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Necesito tarjeta de crédito para empezar?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">No. El plan Starter es completamente gratis sin necesidad de tarjeta. Solo creas tu cuenta y empiezas a trabajar.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Mis clientes necesitan pagar para acceder a su portal?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">No. El portal del cliente es gratis para ellos. Tú pagas la suscripción y tus clientes acceden sin costo.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Puedo cancelar cuando quiera?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Sí, puedes cancelar en cualquier momento desde tu configuración. Sin penalizaciones ni contratos.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿En qué idiomas está disponible Sympra?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Sympra está disponible en español e inglés. Puedes cambiar el idioma desde la pantalla de login.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Puedo usar Sympra desde el teléfono?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Sí. Sympra es una PWA (Progressive Web App) que puedes instalar en iPhone y Android como si fuera una app nativa, sin descargar nada de la App Store.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Mis datos están seguros?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Sí. Todos los datos se almacenan en servidores seguros con encriptación SSL. Sympra cumple con los estándares de privacidad más altos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <h2 class="cta-title">Empieza hoy, gratis</h2>
+    <p class="cta-sub">Únete a cientos de freelancers que ya gestionan su negocio con Sympra.</p>
+    <a href="https://sympra.app" class="btn-primary" style="font-size:18px;padding:18px 40px;">🚀 Crear cuenta gratis</a>
+    <p style="margin-top:16px;font-size:13px;color:var(--ink3);">Sin tarjeta · Sin contrato · Sin complicaciones</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Sym<em>pra</em></div>
+    <div class="footer-links">
+      <a href="https://sympra.app">App</a>
+      <a href="#pricing">Precios</a>
+      <a href="#faq">FAQ</a>
+      <a href="mailto:soporte@sympra.app">Soporte</a>
+    </div>
+    <div class="footer-copy">© 2026 Anthony Daniel Paulino Castillo</div>
+  </div>
+</footer>
+
+<script>
+// FAQ toggle
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// Counter animation
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 2000;
+  const step = target / (duration / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    if (target >= 1000000) {
+      el.textContent = (current / 1000000).toFixed(1) + 'M';
+    } else if (target >= 1000) {
+      el.textContent = Math.floor(current).toLocaleString();
+    } else {
+      el.textContent = Math.floor(current);
+    }
+  }, 16);
+}
+
+// Intersection observer for counters
+const counters = document.querySelectorAll('.counter');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => observer.observe(c));
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
