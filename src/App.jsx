@@ -1254,8 +1254,8 @@ function FreelancerShell({ db, dispatch, onLogout }) {
         <div className={`ni${view==="settings"?" on":""}`} onClick={()=>setView("settings")}><span className="ni-ic">⚙</span>Ajustes</div>
         <div className="side-bot">
           <div className="side-user">
-            <Avatar initials={DB.freelancer.avatar} size="md" fr />
-            <div><div className="side-uname">{DB.freelancer.name}</div><div className="side-uemail">{DB.freelancer.email}</div></div>
+            <Avatar initials={(db.freelancer.name||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2)} size="md" fr />
+            <div><div className="side-uname">{db.freelancer.name}</div><div className="side-uemail">{db.freelancer.email}</div></div>
           </div>
           <button className="logout-b" onClick={onLogout}>↩ Cerrar sesión</button>
         </div>
