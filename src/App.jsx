@@ -791,7 +791,7 @@ function MediaPlayer({ item, onClose }) {
         </div>
         <div style={{padding:20,background:"#111",minHeight:200,display:"flex",alignItems:"center",justifyContent:"center"}}>
           {item.type==="video" && <video controls style={{maxWidth:"100%",maxHeight:400,borderRadius:8}} src={item.url}><source src={item.url} type="video/mp4"/>Tu navegador no soporta video.</video>}
-          {item.type==="audio" && <div style={{width:"100%",padding:"30px 0"}}><div style={{fontSize:48,textAlign:"center",marginBottom:16}}>🎵</div><audio controls style={{width:"100%"}} src={item.url}><source src={item.url} type="audio/mpeg"/>Tu navegador no soporta audio.</audio></div>}
+          {item.type==="audio" && <div style={{width:"100%",padding:"30px 0"}}><div style={{fontSize:48,textAlign:"center",marginBottom:16}}>🎵</div><audio controls style={{width:"100%"}} src={item.url}><source src={item.url} type="audio/wav"/><source src={item.url} type="audio/mpeg"/><source src={item.url} type="audio/ogg"/><source src={item.url} type="audio/flac"/>Tu navegador no soporta audio.</audio></div>}
           {item.type==="image" && <img src={item.url} alt={item.name} style={{maxWidth:"100%",maxHeight:400,borderRadius:8,objectFit:"contain"}}/>}
           {item.type==="pdf"   && <div style={{textAlign:"center",color:"#fff"}}><div style={{fontSize:64,marginBottom:12}}>📄</div><a href={item.url} target="_blank" rel="noreferrer" className="btn btn-dark" style={{textDecoration:"none"}}>Abrir PDF →</a></div>}
         </div>
@@ -899,7 +899,7 @@ function AddMediaModal({ clients, projects, onClose, onSave }) {
             ))}
           </div>
         </div>
-        {form.source==="upload" && <div className="mfield"><label className="mlbl">Archivo</label><input type="file" accept="video/*,audio/*,image/*,.pdf" onChange={e=>setFile(e.target.files[0])} style={{fontSize:13,color:"var(--ink)"}}/>{file&&<div style={{fontSize:11,color:"var(--green)",marginTop:4}}>✓ {file.name} ({(file.size/1024/1024).toFixed(1)} MB)</div>}</div>}
+        {form.source==="upload" && <div className="mfield"><label className="mlbl">Archivo</label><input type="file" accept="video/*,audio/*,.wav,.wave,.aif,.aiff,.flac,.ogg,.mp3,.m4a,image/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" onChange={e=>setFile(e.target.files[0])} style={{fontSize:13,color:"var(--ink)"}}/>{file&&<div style={{fontSize:11,color:"var(--green)",marginTop:4}}>✓ {file.name} ({(file.size/1024/1024).toFixed(1)} MB)</div>}</div>}
         {form.source==="link"   && <div className="mfield"><label className="mlbl">URL (YouTube, Vimeo, Drive, directo...)</label><input className="minp" placeholder="https://..." value={form.url} onChange={e=>set("url",e.target.value)}/></div>}
         <div className="mfield"><label className="mlbl">Nota para el cliente (opcional)</label><input className="minp" placeholder="Versión final para aprobación..." value={form.note} onChange={e=>set("note",e.target.value)}/></div>
         <div className="mactions">
