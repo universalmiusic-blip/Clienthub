@@ -824,22 +824,13 @@ function AddMediaModal({ clients, projects, onClose, onSave }) {
     if(file) {
       setUploading(true);
       try {
-        // Get signature from our API
-        const sigRes = await fetch("/api/upload/sign", {
-          method:"POST", headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ folder: "sympra" })
-        });
-        const { signature, timestamp, apiKey, cloudName, folder } = await sigRes.json();
-
-        // Upload to Cloudinary
+        // Upload directly to Cloudinary with unsigned preset
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("signature", signature);
-        formData.append("timestamp", timestamp);
-        formData.append("api_key", apiKey);
-        formData.append("folder", folder);
+        formData.append("upload_preset", "cgqnyakd");
+        formData.append("folder", "sympra");
 
-        const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+        const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dwp6vszfx/auto/upload", {
           method:"POST", body: formData
         });
         const uploadData = await uploadRes.json();
