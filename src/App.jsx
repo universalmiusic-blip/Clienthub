@@ -804,15 +804,65 @@ function MediaPlayer({ item, onClose }) {
 function AddMediaModal({ clients, projects, onClose, onSave }) {
   const [form, setForm] = useState({ clientId:"", projectId:"", name:"", type:"video", note:"", source:"upload", url:"" });
   const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const set = (k,v) => setForm(f=>({...f,[k]:v}));
   const filteredProjects = projects.filter(p => p.clientId === +form.clientId);
-  const handleSave = () => {
+
+  const handleSave = async () => {
     if(!form.name||!form.clientId) return;
-    const url = form.source==="link" ? form.url : (file ? URL.createObjectURL(file) : "");
-    const ext = form.source==="link" ? (form.url.split(".").pop().split("?")[0]||form.type) : (file?.name.split(".").pop()||form.type);
-    const size = file ? `${(file.size/1024/1024).toFixed(1)} MB` : "—";
-    onSave({ id: Date.now(), clientId:+form.clientId, projectId:+form.projectId||null, name:form.name, type:form.type, ext, size, url, thumb:FILE_ICONS[form.type], date:new Date().toISOString().split("T")[0], note:form.note });
-    onClose();
+    
+    // If link, save directly
+    if(form.source==="link") {
+      const ext = form.url.split(".").pop().split("?")[0]||form.type;
+      onSave({ id: Date.now(), clientId:+form.clientId, projectId:+form.projectId||null, name:form.name, type:form.type, ext, size:"—", url:form.url, thumb:FILE_ICONS[form.type], date:new Date().toISOString().split("T")[0], note:form.note });
+      onClose();
+      return;
+    }
+
+    // Upload to Cloudinary
+    if(file) {
+      setUploading(true);
+      try {
+        // Get signature from our API
+        const sigRes = await fetch("/api/upload/sign", {
+          method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ folder: "sympra" })
+        });
+        const { signature, timestamp, apiKey, cloudName, folder } = await sigRes.json();
+
+        // Upload to Cloudinary
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("signature", signature);
+        formData.append("timestamp", timestamp);
+        formData.append("api_key", apiKey);
+        formData.append("folder", folder);
+
+        const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+          method:"POST", body: formData
+        });
+        const uploadData = await uploadRes.json();
+
+        if(uploadData.secure_url) {
+          const ext = file.name.split(".").pop()||form.type;
+          const size = `${(file.size/1024/1024).toFixed(1)} MB`;
+          onSave({ id: Date.now(), clientId:+form.clientId, projectId:+form.projectId||null, name:form.name, type:form.type, ext, size, url:uploadData.secure_url, thumb:FILE_ICONS[form.type], date:new Date().toISOString().split("T")[0], note:form.note });
+          onClose();
+        } else {
+          alert("Error subiendo archivo. Intenta de nuevo.");
+        }
+      } catch(e) {
+        // Fallback to local URL if Cloudinary fails
+        const url = URL.createObjectURL(file);
+        const ext = file.name.split(".").pop()||form.type;
+        const size = `${(file.size/1024/1024).toFixed(1)} MB`;
+        onSave({ id: Date.now(), clientId:+form.clientId, projectId:+form.projectId||null, name:form.name, type:form.type, ext, size, url, thumb:FILE_ICONS[form.type], date:new Date().toISOString().split("T")[0], note:form.note });
+        onClose();
+      } finally {
+        setUploading(false);
+      }
+    }
   };
   return (
     <div className="moverlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
@@ -854,7 +904,7 @@ function AddMediaModal({ clients, projects, onClose, onSave }) {
         <div className="mfield"><label className="mlbl">Nota para el cliente (opcional)</label><input className="minp" placeholder="Versión final para aprobación..." value={form.note} onChange={e=>set("note",e.target.value)}/></div>
         <div className="mactions">
           <button className="m-cancel" onClick={onClose}>Cancelar</button>
-          <button className="m-save" onClick={handleSave} disabled={!form.name||!form.clientId}>Subir archivo</button>
+          <button className="m-save" onClick={handleSave} disabled={!form.name||!form.clientId||uploading}>{uploading?"Subiendo...":"Subir archivo"}</button>
         </div>
       </div>
     </div>
