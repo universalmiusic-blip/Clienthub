@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef, useCallback } from "react";
 
 // ════════════════════════════════════════════════════════════
@@ -1150,7 +1151,57 @@ function FOverview({ db, dispatch }) {
   );
 }
 function FProjects({db,dispatch}){const[tab,setTab]=useState("all");const list=tab==="all"?db.projects:db.projects.filter(p=>p.status===tab);return(<div className="pg"><div className="sh-row"><div className="sh">Proyectos</div><button className="btn btn-dark btn-sm" onClick={()=>dispatch({type:"modal",m:"project"})}>+ Nuevo</button></div><div className="ptabs">{[{k:"all",l:"Todos"},{k:"active",l:"Activos"},{k:"planning",l:"Planificación"},{k:"completed",l:"Completados"}].map(t=><button key={t.k} className={`ptab${tab===t.k?" on":""}`} onClick={()=>setTab(t.k)}>{t.l}</button>)}</div><div className="card">{list.length===0&&<div className="empty"><div className="empty-ic">📂</div>Sin proyectos</div>}{list.map(p=>{const cl=db.clients.find(c=>c.id===p.clientId);return(<div key={p.id} style={{padding:"16px 0",borderBottom:"1px solid var(--paper2)",display:"grid",gridTemplateColumns:"1fr auto",gap:14,alignItems:"center",cursor:"pointer"}} onClick={()=>dispatch({type:"viewProject",id:p.id})}><div style={{display:"flex",alignItems:"center",gap:12}}><div style={{width:11,height:11,borderRadius:"50%",background:p.color,flexShrink:0}}/><div><div style={{fontWeight:700,fontSize:14,marginBottom:3}}>{p.name}</div><div style={{fontSize:12,color:"var(--ink3)",display:"flex",alignItems:"center",gap:8}}>{cl?.company}·{p.phase}<span className={`tag tag-${p.status}`}>{p.status==="active"?"Activo":p.status==="planning"?"Planificación":"Completado"}</span></div><div style={{marginTop:9,display:"flex",alignItems:"center",gap:9}}><div style={{width:160,height:5,background:"var(--paper2)",borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",borderRadius:3,background:p.color,width:`${p.progress}%`}}/></div><span style={{fontSize:12,color:"var(--ink3)",fontWeight:600}}>{p.progress}%</span></div></div></div><div style={{textAlign:"right"}}><div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:18,fontWeight:800}}>{fmt(p.paid)}</div><div style={{fontSize:11,color:"var(--ink3)"}}>de {fmt(p.budget)}</div>{p.budget-p.paid>0&&<div style={{fontSize:11,color:"var(--amber)",fontWeight:600,marginTop:2}}>{fmt(p.budget-p.paid)} pendiente</div>}</div></div>);})}</div></div>);}
-function FProjectDetail({db,projectId,dispatch}){const p=db.projects.find(x=>x.id===projectId);if(!p)return null;const cl=db.clients.find(c=>c.id===p.clientId);const dels=db.deliverables.filter(d=>d.projectId===projectId);const tasks=db.tasks.filter(t=>t.projectId===projectId);return(<div className="pg fu"><button className="btn btn-outline btn-sm" style={{marginBottom:18}} onClick={()=>dispatch({type:"view",v:"projects"})}>← Volver</button><div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:6,flexWrap:"wrap"}}><div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:26,fontWeight:800,letterSpacing:"-.7px"}}>{p.name}</div><span className={`tag tag-${p.status}`}>{p.status==="active"?"Activo":p.status==="planning"?"Planificación":"Completado"}</span></div><div style={{fontSize:13,color:"var(--ink3)",marginBottom:14}}>{cl?.company}·Entrega {fmtD(p.dueDate)}</div><div className="big-prog" style={{marginBottom:22}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:7}}><span style={{fontSize:12,color:"var(--ink3)"}}>{p.phase}</span><span style={{fontSize:12,fontWeight:700}}>{p.progress}%</span></div><div className="big-prog-bar"><div className="big-prog-fill" style={{width:`${p.progress}%`,background:p.color}}/></div></div><div className="det-grid"><div style={{display:"flex",flexDirection:"column",gap:16}}><div className="card"><div className="card-hd"><div className="card-title">📦 Entregables</div><button className="btn btn-dark btn-xs" onClick={()=>dispatch({type:"modal",m:"deliverable",extra:{projectId}})}>+ Añadir</button></div>{dels.length===0&&<div className="empty"><div className="empty-ic">📭</div>Sin entregables</div>}{dels.map(d=>(<div className="drow" key={d.id}><div className={`ddot ddot-${d.status}`}/><div style={{flex:1}}><div className="dname">{d.name}</div><div className="ddate">{fmtD(d.date)}</div></div><span className={`tag del-${d.status}`}>{d.status==="approved"?"Aprobado":d.status==="review"?"En revisión":"Pendiente"}</span>{d.status==="review"&&<button className="btn btn-xs" style={{background:"var(--green-l)",color:"var(--green)",border:"none",marginLeft:6}} onClick={()=>dispatch({type:"approveDeliverable",id:d.id})}>✓ Aprobar</button>}</div>))}</div><div className="card"><div className="card-hd"><div className="card-title">✅ Tareas</div></div>{tasks.map(t=>(<div className="trow" key={t.id}><div className={`tchk${t.done?" on":""}`} onClick={()=>dispatch({type:"toggleTask",id:t.id})}>✓</div><div style={{flex:1}}><div className={`ttxt${t.done?" done":""}`}>{t.text}</div><div className={`tdue${isOverdue(t.due)&&!t.done?" late":""}`}>{fmtD(t.due)}</div></div><div className={`pdot-sm p${t.priority[0]}`}/></div>))}</div></div><div style={{display:"flex",flexDirection:"column",gap:16}}><div className="card"><div className="card-hd"><div className="card-title">👤 Cliente</div></div><div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}><Avatar initials={cl?.avatar} color={cl?.color} size="lg"/><div><div style={{fontWeight:700,fontSize:14}}>{cl?.name}</div><div style={{fontSize:12,color:"var(--ink3)"}}>{cl?.company}</div></div></div><button className="btn btn-outline" style={{width:"100%",justifyContent:"center"}} onClick={()=>dispatch({type:"openChat",clientId:cl?.id})}>💬 Enviar mensaje</button></div><div className="card"><div className="card-hd"><div className="card-title">💰 Financiero</div></div>{[{l:"Presupuesto",v:fmt(p.budget),cls:""},{l:"Cobrado",v:fmt(p.paid),cls:"g"},{l:"Pendiente",v:fmt(p.budget-p.paid),cls:p.budget-p.paid>0?"a":""}].map((r,i)=>(<div className="fin-row" key={i}><span className="fin-lbl">{r.l}</span><span className={`fin-val ${r.cls}`}>{r.v}</span></div>))}</div></div></div></div>);}
+function FProjectDetail({db,projectId,dispatch}){
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const p=db.projects.find(x=>x.id===projectId);if(!p)return null;
+  const cl=db.clients.find(c=>c.id===p.clientId);
+  const dels=db.deliverables.filter(d=>d.projectId===projectId);
+  const tasks=db.tasks.filter(t=>t.projectId===projectId);
+  const comments = p.comments || [];
+  const addComment = () => {
+    if(!newComment.trim()) return;
+    dispatch({type:"addComment", projectId, text: newComment, date: new Date().toISOString()});
+    setNewComment("");
+  };
+  return(<div className="pg fu">
+    <button className="btn btn-outline btn-sm" style={{marginBottom:18}} onClick={()=>dispatch({type:"view",v:"projects"})}>← Volver</button>
+    <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:6,flexWrap:"wrap"}}>
+      <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:26,fontWeight:800,letterSpacing:"-.7px"}}>{p.name}</div>
+      <span className={`tag tag-${p.status}`}>{p.status==="active"?"Activo":p.status==="planning"?"Planificación":"Completado"}</span>
+    </div>
+    <div style={{fontSize:13,color:"var(--ink3)",marginBottom:14}}>{cl?.company}·Entrega {fmtD(p.dueDate)}</div>
+    <div className="big-prog" style={{marginBottom:22}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:7}}>
+        <span style={{fontSize:12,color:"var(--ink3)"}}>{p.phase}</span>
+        <span style={{fontSize:12,fontWeight:700}}>{p.progress}%</span>
+      </div>
+      <div className="big-prog-bar" style={{cursor:"pointer"}} onClick={e=>{
+        const rect=e.currentTarget.getBoundingClientRect();
+        const pct=Math.round(((e.clientX-rect.left)/rect.width)*100);
+        dispatch({type:"updateProgress",id:p.id,progress:Math.min(100,Math.max(0,pct))});
+      }}>
+        <div className="big-prog-fill" style={{width:`${p.progress}%`,background:p.color}}/>
+      </div>
+      <div style={{fontSize:11,color:"var(--ink3)",marginTop:4}}>Toca la barra para actualizar el progreso</div>
+    </div><div className="det-grid"><div style={{display:"flex",flexDirection:"column",gap:16}}><div className="card"><div className="card-hd"><div className="card-title">📦 Entregables</div><button className="btn btn-dark btn-xs" onClick={()=>dispatch({type:"modal",m:"deliverable",extra:{projectId}})}>+ Añadir</button></div>{dels.length===0&&<div className="empty"><div className="empty-ic">📭</div>Sin entregables</div>}{dels.map(d=>(<div className="drow" key={d.id}><div className={`ddot ddot-${d.status}`}/><div style={{flex:1}}><div className="dname">{d.name}</div><div className="ddate">{fmtD(d.date)}</div></div><span className={`tag del-${d.status}`}>{d.status==="approved"?"Aprobado":d.status==="review"?"En revisión":"Pendiente"}</span>{d.status==="review"&&<button className="btn btn-xs" style={{background:"var(--green-l)",color:"var(--green)",border:"none",marginLeft:6}} onClick={()=>dispatch({type:"approveDeliverable",id:d.id})}>✓ Aprobar</button>}</div>))}</div><div className="card"><div className="card-hd"><div className="card-title">✅ Tareas</div></div>{tasks.map(t=>(<div className="trow" key={t.id}><div className={`tchk${t.done?" on":""}`} onClick={()=>dispatch({type:"toggleTask",id:t.id})}>✓</div><div style={{flex:1}}><div className={`ttxt${t.done?" done":""}`}>{t.text}</div><div className={`tdue${isOverdue(t.due)&&!t.done?" late":""}`}>{fmtD(t.due)}</div></div><div className={`pdot-sm p${t.priority[0]}`}/></div>))}</div></div><div style={{display:"flex",flexDirection:"column",gap:16}}><div className="card"><div className="card-hd"><div className="card-title">👤 Cliente</div></div><div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}><Avatar initials={cl?.avatar} color={cl?.color} size="lg"/><div><div style={{fontWeight:700,fontSize:14}}>{cl?.name}</div><div style={{fontSize:12,color:"var(--ink3)"}}>{cl?.company}</div></div></div><button className="btn btn-outline" style={{width:"100%",justifyContent:"center"}} onClick={()=>dispatch({type:"openChat",clientId:cl?.id})}>💬 Enviar mensaje</button></div><div className="card"><div className="card-hd"><div className="card-title">💰 Financiero</div></div>{[{l:"Presupuesto",v:fmt(p.budget),cls:""},{l:"Cobrado",v:fmt(p.paid),cls:"g"},{l:"Pendiente",v:fmt(p.budget-p.paid),cls:p.budget-p.paid>0?"a":""}].map((r,i)=>(<div className="fin-row" key={i}><span className="fin-lbl">{r.l}</span><span className={`fin-val ${r.cls}`}>{r.v}</span></div>))}</div></div></div>
+    {/* COMMENTS SECTION */}
+    <div className="card" style={{marginTop:20}}>
+      <div className="card-hd"><div className="card-title">💬 Comentarios del proyecto</div></div>
+      {comments.length===0 && <div style={{color:"var(--ink3)",fontSize:13,marginBottom:12}}>Sin comentarios aún.</div>}
+      {comments.map((c,i)=>(
+        <div key={i} style={{background:"var(--paper2)",borderRadius:10,padding:"10px 14px",marginBottom:8}}>
+          <div style={{fontSize:13,color:"var(--ink)",marginBottom:4}}>{c.text}</div>
+          <div style={{fontSize:11,color:"var(--ink3)"}}>{new Date(c.date).toLocaleDateString("es-ES",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</div>
+        </div>
+      ))}
+      <div style={{display:"flex",gap:8,marginTop:8}}>
+        <input className="finp" style={{flex:1,padding:"8px 12px",fontSize:13}} placeholder="Escribe un comentario..." value={newComment} onChange={e=>setNewComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addComment()}/>
+        <button className="btn btn-dark btn-sm" onClick={addComment}>Enviar</button>
+      </div>
+    </div>
+  </div>);
+}
 function FClients({db,dispatch}){return(<div className="pg"><div className="sh-row"><div className="sh">Clientes</div><button className="btn btn-dark btn-sm" onClick={()=>dispatch({type:"modal",m:"client"})}>+ Nuevo</button></div><div className="card">{db.clients.map(c=>{const ap=db.projects.filter(p=>p.clientId===c.id&&p.status==="active").length;return(<div className="crow" key={c.id}><Avatar initials={c.avatar} color={c.color} size="lg"/><div><div className="cname">{c.name}</div><div className="cco">{c.company}·{ap} activo{ap!==1?"s":""}</div></div><div className="cright"><div className="cbilled">{fmt(c.totalBilled)}</div><div className={`cstat ${c.status==="active"?"ca":"ci"}`}>{c.status==="active"?"● Activo":"○ Inactivo"}</div></div></div>);})}</div></div>);}
 function FInvoices({db,dispatch}){const[tab,setTab]=useState("all");const list=tab==="all"?db.invoices:db.invoices.filter(i=>i.status===tab);const paid=db.invoices.filter(i=>i.status==="paid").reduce((s,i)=>s+i.amount,0);const pend=db.invoices.filter(i=>i.status==="pending").reduce((s,i)=>s+i.amount,0);const over=db.invoices.filter(i=>i.status==="overdue").reduce((s,i)=>s+i.amount,0);return(<div className="pg"><div className="sh-row"><div className="sh">Facturación</div><button className="btn btn-dark btn-sm" onClick={()=>dispatch({type:"modal",m:"invoice"})}>+ Nueva</button></div><div className="stats" style={{marginBottom:18}}>{[{lbl:"Cobrado",val:fmt(paid),bar:"#15803d"},{lbl:"Por cobrar",val:fmt(pend),bar:"#1d4ed8"},{lbl:"Vencido",val:fmt(over),bar:"#b91c1c"},{lbl:"Total",val:fmt(paid+pend+over),bar:"#0f0e0c"}].map((s,i)=>(<div className="scard fu" key={i}><div className="scard-bar" style={{background:s.bar}}/><div className="scard-label">{s.lbl}</div><div className="scard-val" style={{fontSize:22}}>{s.val}</div></div>))}</div><div className="ptabs">{[{k:"all",l:"Todas"},{k:"pending",l:"Pendientes"},{k:"overdue",l:"Vencidas"},{k:"paid",l:"Pagadas"}].map(t=><button key={t.k} className={`ptab${tab===t.k?" on":""}`} onClick={()=>setTab(t.k)}>{t.l}</button>)}</div><div className="card">{list.length===0&&<div className="empty"><div className="empty-ic">🧾</div>Sin facturas</div>}{list.map(inv=>{const cl=db.clients.find(c=>c.id===inv.clientId);return(<div className="irow" key={inv.id}><div className="inum">{inv.number}</div><div style={{flex:1,minWidth:0}}><div className="iname" style={{color:"var(--ink)",fontWeight:600}}>{cl?.name}</div><div style={{fontSize:11,color:"var(--ink4)"}}>Vence {fmtD(inv.due)}</div></div><div className="iamt">{fmt(inv.amount)}</div><span className={`ibadge ib-${inv.status}`}>{inv.status==="paid"?"✓ Pagado":inv.status==="pending"?"Pendiente":"⚠ Vencido"}</span>{inv.status!=="paid"&&<button className="btn btn-xs btn-outline" onClick={()=>dispatch({type:"markPaid",id:inv.id})}>Marcar pagado</button>}</div>);})}</div></div>);}
 function FTasks({db,dispatch}){const[tab,setTab]=useState("open");const open=db.tasks.filter(t=>!t.done);const done=db.tasks.filter(t=>t.done);const list=tab==="open"?open:done;return(<div className="pg"><div className="sh-row"><div className="sh">Tareas</div><button className="btn btn-dark btn-sm" onClick={()=>dispatch({type:"modal",m:"task"})}>+ Nueva</button></div><div className="ptabs"><button className={`ptab${tab==="open"?" on":""}`} onClick={()=>setTab("open")}>Pendientes ({open.length})</button><button className={`ptab${tab==="done"?" on":""}`} onClick={()=>setTab("done")}>Completadas ({done.length})</button></div><div className="card">{list.length===0&&<div className="empty"><div className="empty-ic">🎉</div>{tab==="open"?"¡Sin pendientes!":"Sin completadas"}</div>}{list.map(t=>{const pr=db.projects.find(p=>p.id===t.projectId);const late=!t.done&&isOverdue(t.due);return(<div className="trow" key={t.id}><div className={`tchk${t.done?" on":""}`} onClick={()=>dispatch({type:"toggleTask",id:t.id})}>✓</div><div style={{flex:1}}><div className={`ttxt${t.done?" done":""}`}>{t.text}</div><div style={{display:"flex",gap:8,marginTop:2}}><div className={`tdue${late?" late":""}`}>{late?"⚠ ":""}{fmtD(t.due)}</div>{pr&&<div style={{fontSize:11,color:"var(--ink4)"}}>·{pr.name}</div>}</div></div><div className={`pdot-sm p${t.priority[0]}`}/></div>);})}</div></div>);}
@@ -1281,6 +1332,119 @@ function Login({ onLogin, lang, setLang }) {
 // ════════════════════════════════════════════════════════════
 //  FREELANCER SHELL
 // ════════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════
+//  AI ASSISTANT
+// ════════════════════════════════════════════════════════════
+function AIAssistant({ db }) {
+  const [messages, setMessages] = useState([
+    { role: "assistant", text: "¡Hola! Soy tu asistente de Sympra 🤖 Puedo ayudarte a redactar propuestas, responder clientes, crear descripciones de proyectos, calcular presupuestos y más. ¿En qué te ayudo hoy?" }
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const bottomRef = React.useRef(null);
+
+  React.useEffect(() => { bottomRef.current?.scrollIntoView({behavior:"smooth"}); }, [messages]);
+
+  const quickActions = [
+    { label: "✍️ Redactar propuesta", prompt: "Ayúdame a redactar una propuesta profesional para un nuevo cliente de diseño web. Presupuesto: $2,000. Duración: 4 semanas." },
+    { label: "📧 Responder cliente", prompt: "Un cliente me pide un descuento del 30% en mi proyecto. Ayúdame a responder profesionalmente manteniendo mi precio." },
+    { label: "💰 Calcular precio", prompt: `Tengo ${db.projects?.length||0} proyectos activos y ${db.clients?.length||0} clientes. ¿Cómo puedo optimizar mis precios como freelancer?` },
+    { label: "📋 Descripción de proyecto", prompt: "Crea una descripción profesional para un proyecto de identidad visual corporativa para una startup de tecnología." },
+  ];
+
+  const sendMessage = async (text) => {
+    const msg = text || input.trim();
+    if (!msg) return;
+    setInput("");
+    setLoading(true);
+
+    const context = `Eres el asistente IA de Sympra, una app para freelancers. El usuario tiene: ${db.clients?.length||0} clientes, ${db.projects?.length||0} proyectos, ${db.tasks?.filter(t=>!t.done).length||0} tareas pendientes. Responde siempre en español, de forma concisa y profesional.`;
+
+    const newMessages = [...messages, { role: "user", text: msg }];
+    setMessages(newMessages);
+
+    try {
+      const res = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system: context,
+          messages: newMessages.filter(m=>m.role!=="assistant"||newMessages.indexOf(m)>0).map(m=>({
+            role: m.role === "user" ? "user" : "assistant",
+            content: m.text
+          }))
+        })
+      });
+      const data = await res.json();
+      const reply = data.content?.[0]?.text || "Lo siento, hubo un error. Intenta de nuevo.";
+      setMessages(prev => [...prev, { role: "assistant", text: reply }]);
+    } catch(e) {
+      setMessages(prev => [...prev, { role: "assistant", text: "Error de conexión. Verifica tu internet e intenta de nuevo." }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="pg" style={{display:"flex",flexDirection:"column",height:"calc(100vh - 80px)"}}>
+      <div style={{marginBottom:16}}>
+        <div className="sh">🤖 IA Asistente</div>
+        <p style={{fontSize:13,color:"var(--ink3)",marginTop:4}}>Tu asistente inteligente para proyectos, propuestas y clientes</p>
+      </div>
+
+      {/* Quick actions */}
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
+        {quickActions.map((a,i)=>(
+          <button key={i} onClick={()=>sendMessage(a.prompt)} disabled={loading}
+            style={{padding:"6px 14px",borderRadius:20,border:"1.5px solid var(--paper3)",background:"var(--paper)",cursor:"pointer",fontSize:12,fontWeight:600,color:"var(--ink3)",transition:"all .15s",whiteSpace:"nowrap"}}>
+            {a.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Chat area */}
+      <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:12,marginBottom:16,padding:"4px 0"}}>
+        {messages.map((m,i)=>(
+          <div key={i} style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
+            <div style={{
+              maxWidth:"80%",padding:"12px 16px",borderRadius:m.role==="user"?"16px 16px 4px 16px":"16px 16px 16px 4px",
+              background:m.role==="user"?"var(--ink)":"var(--paper2)",
+              color:m.role==="user"?"#fff":"var(--ink)",
+              fontSize:14,lineHeight:1.6,whiteSpace:"pre-wrap"
+            }}>
+              {m.role==="assistant" && <span style={{fontSize:16,marginRight:8}}>🤖</span>}
+              {m.text}
+            </div>
+          </div>
+        ))}
+        {loading && (
+          <div style={{display:"flex",justifyContent:"flex-start"}}>
+            <div style={{background:"var(--paper2)",borderRadius:"16px 16px 16px 4px",padding:"12px 16px",fontSize:14,color:"var(--ink3)"}}>
+              🤖 Pensando...
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef}/>
+      </div>
+
+      {/* Input */}
+      <div style={{display:"flex",gap:8,paddingBottom:8}}>
+        <input
+          className="finp" style={{flex:1,padding:"12px 16px",fontSize:14,borderRadius:12}}
+          placeholder="Escribe tu pregunta..." value={input}
+          onChange={e=>setInput(e.target.value)}
+          onKeyDown={e=>e.key==="Enter"&&!loading&&sendMessage()}
+          disabled={loading}
+        />
+        <button className="btn btn-dark" onClick={()=>sendMessage()} disabled={loading||!input.trim()} style={{padding:"12px 20px",borderRadius:12}}>
+          {loading ? "..." : "→"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function FreelancerShell({ db, dispatch, onLogout }) {
   const [view, setView]         = useState("overview");
   const [projId, setProjId]     = useState(null);
@@ -1305,9 +1469,10 @@ function FreelancerShell({ db, dispatch, onLogout }) {
     { k:"messages",     ic:"💬", l:"Mensajes" },
     { k:"notifications",ic:"🔔", l:"Notificaciones", badge: unreadNotifs },
     { k:"media",        ic:"🎬", l:"Multimedia" },
+    { k:"ai",           ic:"🤖", l:"IA Asistente" },
   ];
 
-  const titles = { overview:"Resumen", projects:"Proyectos", clients:"Clientes", invoices:"Facturación", tasks:"Tareas", messages:"Mensajes", projectDetail:"Detalle del proyecto", notifications:"Notificaciones", media:"Multimedia", settings:"Ajustes" };
+  const titles = { overview:"Resumen", projects:"Proyectos", clients:"Clientes", invoices:"Facturación", tasks:"Tareas", messages:"Mensajes", projectDetail:"Detalle del proyecto", notifications:"Notificaciones", media:"Multimedia", ai:"IA Asistente", settings:"Ajustes" };
 
   return (
     <div className="shell">
@@ -1371,6 +1536,7 @@ function FreelancerShell({ db, dispatch, onLogout }) {
         )}
         {view==="media"    && <FMedia db={db} dispatch={doDispatch}/>}
         {view==="settings" && <SettingsPage db={db} onLogout={onLogout} onOpenLegal={setLegalDoc}/>}
+        {view==="ai"       && <AIAssistant db={db}/>}
         <LegalFooter onOpen={setLegalDoc}/>
       </div>
       {/* ── MOBILE BOTTOM NAV ── */}
@@ -1379,7 +1545,7 @@ function FreelancerShell({ db, dispatch, onLogout }) {
           {v:"overview",  icon:"🏠", label:"Inicio"},
           {v:"clients",   icon:"👥", label:"Clientes"},
           {v:"projects",  icon:"🚀", label:"Proyectos"},
-          {v:"invoices",  icon:"🧾", label:"Facturas"},
+          {v:"ai",        icon:"🤖", label:"IA"},
           {v:"settings",  icon:"⚙️",  label:"Ajustes"},
         ].map(item=>(
           <div key={item.v} className={`mnav-item${view===item.v?" active":""}`} onClick={()=>setView(item.v)}>
@@ -1587,6 +1753,12 @@ export default function SympraApp() {
     switch(action.type) {
       case "toggleTask":
         setDb(d => ({ ...d, tasks: d.tasks.map(t => t.id===action.id ? {...t,done:!t.done} : t) }));
+        break;
+      case "updateProgress":
+        setDb(d => ({ ...d, projects: d.projects.map(p => p.id===action.id ? {...p,progress:action.progress} : p) }));
+        break;
+      case "addComment":
+        setDb(d => ({ ...d, projects: d.projects.map(p => p.id===action.projectId ? {...p,comments:[...(p.comments||[]),{text:action.text,date:action.date}]} : p) }));
         break;
       case "markPaid":
         setDb(d => ({ ...d, invoices: d.invoices.map(i => i.id===action.id ? {...i,status:"paid"} : i) }));
