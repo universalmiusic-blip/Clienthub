@@ -1645,7 +1645,17 @@ function AdminPanel({ onLogout }) {
 export default function SympraApp() {
   const [session, setSession]   = useState(null);
   const [lang, setLang]         = useState("es");
-  const [db, setDb]             = useState({ ...DB });
+  const [db, setDb]             = useState({ 
+    ...DB,
+    clients: [],
+    projects: [],
+    invoices: [],
+    tasks: [],
+    media: [],
+    messages: [],
+    notifications: [],
+    deliverables: [],
+  });
   const [modalType, setModalType] = useState(null);
   const [toasts, setToasts]     = useState([]);
   const toastRef = useRef({});
