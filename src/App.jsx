@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 // ════════════════════════════════════════════════════════════
 //  NOTIFICATION TYPES & INITIAL DATA
@@ -1341,9 +1341,9 @@ function AIAssistant({ db }) {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const bottomRef = React.useRef(null);
+  const bottomRef = useRef(null);
 
-  React.useEffect(() => { bottomRef.current?.scrollIntoView({behavior:"smooth"}); }, [messages]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({behavior:"smooth"}); }, [messages]);
 
   const quickActions = [
     { label: "✍️ Redactar propuesta", prompt: "Ayúdame a redactar una propuesta profesional para un nuevo cliente de diseño web. Presupuesto: $2,000. Duración: 4 semanas." },
