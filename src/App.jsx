@@ -1322,7 +1322,7 @@ function Login({ onLogin, lang, setLang }) {
             {mode==="login"?t.signUp:t.signIn}
           </span>
         </div>
-        {mode==="login" && <div className="demo-box"><div className="demo-ttl">{t.demo}</div>{demos.map(d=>(<div className="demo-row" key={d.email} onClick={()=>{setEmail(d.email);setPass(d.pass);setErr("");}}><span className="demo-em">{d.label}·{d.email}/{d.pass}</span><span className="demo-use">{t.use}</span></div>))}</div>}
+        
       </div></div>
     </div>
   );
